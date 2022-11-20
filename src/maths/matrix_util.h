@@ -522,49 +522,81 @@ namespace mkr {
         }
 
         /**
-         * @brief Get the view matrix given the cameras orientation and position
-         * 
-         * @param _forward the forward vector
-         * @param _up the up vector
+         * @brief Get the view matrix given the cameras orientation and position.
+         * The vectors _forward and _up are expected to be unit vectors.
+         *
+         * @param _forward the forward unit vector
+         * @param _up the up unit vector
          * @param _position the position in 3D space
          * @return matrix4x4 the view matrix in 3D space
          */
         static matrix4x4 view_matrix(const vector3 &_forward, const vector3 &_up, const vector3 &_position) {
-            vector3 right = _forward.cross(_up);
             /**
-             * translation * orientation matrix  = homogeneous matrix
-             * [ 1 0 0 T1 ][ R11  R12  R13  0 ]    [ R11 R12 R13 T1 ]
-             * [ 0 1 0 T2 ][ R21  R22  R23  0 ]  = [ R21 R22 R23 T2 ]
-             * [ 0 0 1 T3 ][ R31  R32  R33  0 ]    [ R31 R32 R33 T3 ]
-             * [ 0 0 0 1  ][  0    0    0   1 ]    [  0   0   0  1  ]
+             * The view matrix on the other hand is used to transform vertices from world-space to view-space.
+             * This matrix is usually concatenated together with the object’s world matrix and the projection matrix so
+             * that vertices can be transformed from object-space directly to clip-space in the vertex program.
              *
-             * [  Right   trans ]
-             * [  Up      trans ]
-             * [ -Forward trans ]
-             * [  0   0   0   1  ]
+             * There are 2 parts to this transformation.
+             *
+             * The first part is translation.
+             * Since our camera position is always at (0, 0, 0) relative to what our player sees (player always view from the camera's perspective),
+             * when we translate our camera a certain direction, what we are doing mathematically is translating everything else in the opposite direction.
+             *
+             * Translation Matrix:
+             * |   1   0   0  -Tx  |
+             * |   0   1   0  -Ty  |
+             * |   0   0   1  -Tz  |
+             * |   0   0   0   1   |
+             *
+             * The second part is orientation.
+             * Once again, our camera has the orientation of (1, 1, 1) relative to what our player sees,
+             * we need to transform everything else to the camera's orientation (view-space).
+             * To do that, simply multiply the transformation matrix of everything by the inverse of our camera's orientation (basic linear algebra).
+             * And we also know that since our camera's orientation matrix is orthogonal (3 orthonormal axes), the inverse is simply the transpose (basic linear algebra).
+             * For our convention, x-axis points left, y-axis points up, z-axis points forward.
+             *
+             * Orientation Matrix:
+             * |  X1  X2  X3   0   |
+             * |  Y1  Y2  Y3   0   |
+             * |  Z1  Z2  Z3   0   |
+             * |   0   0   0   1   |
+             *
+             *
+             * View Matrix = Orientation Matrix * Translation Matrix:
+             * |  X1  X2  X3  -T·X | --------- -T·X means -T.dot(X)
+             * |  Y1  Y2  Y3  -T·Y |
+             * |  Z1  Z2  Z3  -T·Z |
+             * |   0   0   0   1   |
+             *
+             * IMPORTANT NOTE:
+             * Normalized device coordinates (NDCs) make up a coordinate system that describes positions on a virtual plotting device.
+             * The lower left corner corresponds to (0,0), and the upper right corner corresponds to (1,1).
+             *
+             * By convention, OpenGL is a right-handed system. However, in normalized device coordinates (NDC) OpenGL actually
+             * uses a left-handed system (the projection matrix switches the handedness). Therefore to handle this switch,
+             * we use the right vector in our orientation matrix instead of the left vector.
              */
-            matrix4x4 mat;
-            mat[3][3] = 1.0f;
 
-            // Column 0
+            const vector3 right = _forward.cross(_up);
+            const vector3 up = right.cross(_forward); // We recalculate the up vector again just in case it wasn't actually perpendicular.
+
+            matrix4x4 mat = matrix4x4::identity();
+
             mat[0][0] = right.x_;
-            mat[0][1] = _up.x_;
-            mat[0][2] = -_forward.x_;
-
-            // Column 1
             mat[1][0] = right.y_;
-            mat[1][1] = _up.y_;
-            mat[1][2] = -_forward.y_;
-
-            // Column 2
             mat[2][0] = right.z_;
-            mat[2][1] = _up.z_;
-            mat[2][2] = -_forward.z_;
 
-            // Column 3
-            mat[3][0] = _position.x_;
-            mat[3][1] = _position.y_;
-            mat[3][2] = _position.z_;
+            mat[0][1] = up.x_;
+            mat[1][1] = up.y_;
+            mat[2][1] = up.z_;
+
+            mat[0][2] = _forward.x_;
+            mat[1][2] = _forward.y_;
+            mat[2][2] = _forward.z_;
+
+            mat[3][0] = -_position.dot(right);
+            mat[3][1] = -_position.dot(up);
+            mat[3][2] = -_position.dot(_forward);
 
             return mat;
         }
