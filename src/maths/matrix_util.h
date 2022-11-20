@@ -549,8 +549,7 @@ namespace mkr {
              * |   0   0   0   1   |
              *
              * The second part is orientation.
-             * Once again, our camera has the orientation of (1, 1, 1) relative to what our player sees,
-             * we need to transform everything else to the camera's orientation (view-space).
+             * Once again, our camera has the orientation of (1, 1, 1) relative to what our player sees, so we need to transform everything else to the camera's orientation (view-space).
              * To do that, simply multiply the transformation matrix of everything by the inverse of our camera's orientation (basic linear algebra).
              * And we also know that since our camera's orientation matrix is orthogonal (3 orthonormal axes), the inverse is simply the transpose (basic linear algebra).
              * For our convention, x-axis points left, y-axis points up, z-axis points forward.
@@ -601,69 +600,98 @@ namespace mkr {
             return mat;
         }
 
-        static matrix4x4 perspective_matrix(float _aspect_ratio, float _fov, float _near_plane, float _far_plane) {
-            matrix4x4 mat = matrix4x4::identity();
-
+        static matrix4x4 perspective_matrix(float _aspect_ratio, float _fov, float _near, float _far) {
             /**
+             * Written Explanation:
+             * [https://ogldev.org/www/tutorial12/tutorial12.html]
+             *
+             * Video Explanation:
+             * [https://www.youtube.com/watch?v=LhQ85bPCAJ8]
+             * [https://www.youtube.com/watch?v=md3jFANT3UM]
+             *
              * AR  = Aspect Ratio
-             * FOV = Field of View
+             * FOV = Vertical Field of View (Between 0 to π)
              * N   = Near Plane
              * F   = Far Plane
              *
              * Perspective Matrix:
              * | 1/(tan(FOV/2) * AR)         0                0              0       |
              * |          0            1/tan(FOV/2)           0              0       |
-             * |          0                  0          (N+F)/(N-F)   (2*F*N)/(N-F)  |
-             * |          0                  0               -1              0       |
-             * */
+             * |          0                  0          (-N-F)/(N-F)   (2*N*F)(N-F)  |
+             * |          0                  0                1              0       |
+             *
+             * Background Knowledge Required:
+             * - OpenGL performs perspective divide. The final X, Y, Z of the homogenous coordinates are divided by W. | X |
+             *                                                                                                         | Y |
+             *                                                                                                         | Z |
+             *                                                                                                         | W |
+             * - The range of NDC coordinates were designed with the limitations of IEEE 754 floating points in mind.
+             *   A float is most precise between -1 to 1. Around 2 billion of the 4 billion possible permutations of the 32 bits
+             *   are used to represent the range -1 to 1.
+             */
 
-            float b = 1.0f / std::tan(0.5f * _fov);
-            float a = b / _aspect_ratio;
-            float c = (_near_plane + _far_plane) / (_near_plane - _far_plane);
-            float d = (2.0f * _near_plane * _far_plane) / (_near_plane - _far_plane);
-
-            mat[0][0] = a;
-            mat[1][1] = b;
-            mat[2][2] = c;
-            mat[2][3] = -1.0f;
-            mat[3][2] = d;
-
+            matrix4x4 mat;
+            mat[1][1] = 1.0f / std::tan(_fov * 0.5f);
+            mat[0][0] = mat[1][1] / _aspect_ratio;
+            mat[2][2] = (_near - _far) / (_near - _far);
+            mat[2][3] = 1.0f;
+            mat[3][2] = (2.0f * _near * _far) / (_near - _far);
             return mat;
         }
 
         static matrix4x4 orthographic_matrix(float _left, float _right, float _top, float _bottom,
-                                             float _near_plane, float _far_plane) {
-            matrix4x4 mat = matrix4x4::identity();
+                                             float _near, float _far) {
+            /**
+             * [https://en.wikipedia.org/wiki/Orthographic_projection]
+             *
+             * The view box is translated such that its centre is at the origin, then it is scaled to the unit cube which is
+             * defined by having a minimum corner at (-1, -1, -1) and a maximum corner at (1, 1, 1).
+             *
+             * Orthographic Matrix:
+             * | 2/(R-L)     0       0      1  |   |   1   0   0   -(L+R)/2  |   | 2/(R-L)     0       0      (L+R)/(L-R)  |
+             * |    0     2/(T-B)    0      1  | * |   0   1   0   -(T+B)/2  | = |    0     2/(T-B)    0      (T+B)/(B-T)  |
+             * |    0        0    2/(F-N)   1  |   |   0   0   1   -(N+F)/2  |   |    0        0    2/(N-F)   (N+F)/(N-F)  |
+             * |    0        0       0      1  |   |   0   0   1       1     |   |    0        0       0           1       |
+             */
 
+            matrix4x4 mat;
             mat[0][0] = 2.0f / (_right - _left);
             mat[1][1] = 2.0f / (_top - _bottom);
-            mat[2][2] = 2.0f / (_near_plane - _far_plane);
-
-            mat[3][0] = (_right + _left) / (_left - _right);
-            mat[3][1] = (_top + _bottom) / (_bottom - _top);
-            mat[3][2] = (_far_plane + _near_plane) / (_near_plane - _far_plane);
-
+            mat[2][2] = 2.0f / (_far - _near);
             mat[3][3] = 1.0f;
-
+            mat[3][0] = (_left + _right) / (_left - _right);
+            mat[3][1] = (_top + _bottom) / (_bottom - _top);
+            mat[3][2] = (_near + _far) / (_near - _far);
             return mat;
         }
 
-        matrix4x4 orthographic_matrix(float _aspect_ratio, float _ortho_size, float _near_plane, float _far_plane) {
-            // [https://en.wikipedia.org/wiki/Orthographic_projection]
-            // Most tutorial take the absolute position of the viewing box in the world as the input.
-            // So there is a need to translate the box back to the origin.
-            // We do not need to do so as we do our calculation assuming that we are already at the origin.
+        matrix4x4 orthographic_matrix(float _aspect_ratio, float _ortho_size, float _near, float _far) {
+            /**
+             * [https://en.wikipedia.org/wiki/Orthographic_projection]
+             *
+             * The view box is translated such that its centre is at the origin, then it is scaled to the unit cube which is
+             * defined by having a minimum corner at (-1, -1, -1) and a maximum corner at (1, 1, 1).
+             *
+             * Orthographic Matrix:
+             * | 2/(R-L)     0       0      1  |   |   1   0   0   -(L+R)/2  |   | 2/(R-L)     0       0      (L+R)/(L-R)  |
+             * |    0     2/(T-B)    0      1  | * |   0   1   0   -(T+B)/2  | = |    0     2/(T-B)    0      (T+B)/(B-T)  |
+             * |    0        0    2/(F-N)   1  |   |   0   0   1   -(N+F)/2  |   |    0        0    2/(N-F)   (N+F)/(N-F)  |
+             * |    0        0       0      1  |   |   0   0   1       1     |   |    0        0       0           1       |
+             *
+             * In this case, we assume our box is already at the origin.
+             */
 
-            matrix4x4 mat = matrix4x4::identity();
 
-            float top = _ortho_size * 0.5f;
-            float bottom = -top;
-            float right = top * _aspect_ratio;
-            float left = bottom * _aspect_ratio;
+            const float top = _ortho_size * 0.5f;
+            const float bottom = -_ortho_size * 0.5f;
+            const float right = _ortho_size * 0.5f * _aspect_ratio;
+            const float left = -_ortho_size * 0.5f * _aspect_ratio;
 
+            matrix4x4 mat;
             mat[0][0] = 2.0f / (right - left);
             mat[1][1] = 2.0f / (top - bottom);
-            mat[2][2] = 2.0f / (_far_plane - _near_plane);
+            mat[2][2] = 2.0f / (_far - _near);
+            mat[3][3] = 1.0f;
 
             return mat;
         }
