@@ -8,9 +8,9 @@ namespace mkr {
     const vector3 vector3::right{-1.0f, 0.0f, 0.0f};
     const vector3 vector3::forwards{0.0f, 0.0f, 1.0f};
     const vector3 vector3::backwards{0.0f, 0.0f, -1.0f};
-    const vector3 vector3::x_direction{1.0f, 0.0f, 0.0f};
-    const vector3 vector3::y_direction{0.0f, 1.0f, 0.0f};
-    const vector3 vector3::z_direction{0.0f, 0.0f, 1.0f};
+    const vector3 vector3::x_axis{1.0f, 0.0f, 0.0f};
+    const vector3 vector3::y_axis{0.0f, 1.0f, 0.0f};
+    const vector3 vector3::z_axis{0.0f, 0.0f, 1.0f};
 
     vector3::vector3(float _x, float _y, float _z)
             : x_(_x), y_(_y), z_(_z) {}
@@ -65,7 +65,7 @@ namespace mkr {
     void vector3::normalise() {
         const float length = this->length();
         if (maths_util::approx_equal(length, 0.0f)) {
-            zeroise();
+            x_ = y_ = z_ = 0.0f;
             return;
         }
         x_ /= length;
@@ -79,10 +79,6 @@ namespace mkr {
             return vector3::zero;
         }
         return vector3{x_ / length, y_ / length, z_ / length};
-    }
-
-    void vector3::zeroise() {
-        x_ = y_ = z_ = 0.0f;
     }
 
     bool vector3::is_zero() const {

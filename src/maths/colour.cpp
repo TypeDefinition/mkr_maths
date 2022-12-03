@@ -1,3 +1,4 @@
+#include "maths/maths_util.h"
 #include "maths/colour.h"
 
 namespace mkr {

@@ -27,7 +27,7 @@ namespace mkr {
          * @param _point A point on the line.
          * @param _direction The direction of the line.
          */
-        line(const vector3 &_point = vector3::zero, const vector3 &_direction = vector3::x_direction);
+        line(const vector3 &_point = vector3::zero, const vector3 &_direction = vector3::x_axis);
 
         bool operator==(const line &_line) const;
 

@@ -1,8 +1,5 @@
 #pragma once
 
-#include <sstream>
-#include "maths/maths_util.h"
-
 namespace mkr {
     /**
      * Represents a colour with the components RGBA.

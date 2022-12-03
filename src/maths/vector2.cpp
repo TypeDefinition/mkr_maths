@@ -6,8 +6,8 @@ namespace mkr {
     const vector2 vector2::down{0.0f, -1.0f};
     const vector2 vector2::left{1.0f, 0.0f};
     const vector2 vector2::right{-1.0f, 0.0f};
-    const vector2 vector2::x_direction{1.0f, 0.0f};
-    const vector2 vector2::y_direction{0.0f, 1.0f};
+    const vector2 vector2::x_axis{1.0f, 0.0f};
+    const vector2 vector2::y_axis{0.0f, 1.0f};
 
     vector2::vector2(float _x, float _y)
             : x_(_x), y_(_y) {}
@@ -58,7 +58,7 @@ namespace mkr {
     void vector2::normalise() {
         const float length = this->length();
         if (maths_util::approx_equal(length, 0.0f)) {
-            zeroise();
+            x_ = y_ = 0.0f;
             return;
         }
         x_ /= length;
@@ -68,10 +68,6 @@ namespace mkr {
     vector2 vector2::normalised() const {
         const float length = this->length();
         return maths_util::approx_equal(length, 0.0f) ? vector2::zero : vector2{x_ / length, y_ / length};
-    }
-
-    void vector2::zeroise() {
-        x_ = y_ = 0.0f;
     }
 
     bool vector2::is_zero() const {

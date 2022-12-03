@@ -16,9 +16,9 @@ namespace mkr {
         static const vector3 right;
         static const vector3 forwards;
         static const vector3 backwards;
-        static const vector3 x_direction;
-        static const vector3 y_direction;
-        static const vector3 z_direction;
+        static const vector3 x_axis;
+        static const vector3 y_axis;
+        static const vector3 z_axis;
 
         /// The x component.
         float x_;
@@ -63,11 +63,6 @@ namespace mkr {
          * @return A normalised copy of this vector.
          */
         [[nodiscard]] vector3 normalised() const;
-
-        /**
-         * Sets this vector to (0, 0, 0).
-         */
-        void zeroise();
 
         /**
          * Checks if this vector is a zero vector.
@@ -136,5 +131,17 @@ namespace mkr {
         [[nodiscard]] vector3 cross(const vector3 &_vector) const;
 
         friend vector3 operator*(float _scalar, const vector3 &_vector);
+
+        [[nodiscard]] std::string to_string(const int _precision = 4) const {
+            std::ostringstream out;
+            out.precision(_precision);
+            out << std::fixed;
+            out << x_ << ", " << y_ << ", " << z_;
+            return out.str();
+        }
+
+        friend std::ostream &operator<<(std::ostream &_stream, const vector3 & _vector) {
+            return _stream << _vector.to_string();
+        }
     };
 }

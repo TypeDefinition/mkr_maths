@@ -39,7 +39,7 @@ namespace mkr {
           */
         vector3 d_axis;
         float d_angle;
-        d.to_axis_angle(d_angle, d_axis);
+        d.to_axis_angle(d_axis, d_angle);
 
         // Now that we have the angle and axis to rotate around, we have our result.
         return quaternion{d_axis, d_angle * ratio} * _start;
@@ -116,14 +116,10 @@ namespace mkr {
         return (w_ * _quaternion.w_) + (x_ * _quaternion.x_) + (y_ * _quaternion.y_) + (z_ * _quaternion.z_);
     }
 
-    void quaternion::zeroise() {
-        w_ = x_ = y_ = z_ = 0.0f;
-    }
-
     void quaternion::normalise() {
         const float length = this->length();
         if (maths_util::approx_equal(length, 0.0f)) {
-            zeroise();
+            w_ = x_ = y_ = z_ = 0.0f;
             return;
         }
         w_ /= length;
@@ -186,11 +182,11 @@ namespace mkr {
         w_ = std::cos(_angle * 0.5f);
     }
 
-    void quaternion::to_axis_angle(float &_angle, vector3 &_rotation_axis) const {
+    void quaternion::to_axis_angle(vector3 &_rotation_axis, float &_angle) const {
         vector3 xyz{x_, y_, z_};
         if (xyz.is_zero()) {
             _angle = 0.0f;
-            _rotation_axis = vector3::x_direction;
+            _rotation_axis = vector3::x_axis;
             return;
         }
 
@@ -199,8 +195,10 @@ namespace mkr {
     }
 
     matrix4x4 quaternion::to_rotation_matrix() const {
-        return matrix4x4{{w_, -z_, y_ - x_, z_, w_, -x_, -y_, -y_, x_, w_, -z_, x_, y_, z_, w_}} *
-               matrix4x4{{w_, -z_, y_, x_, z_, w_, -x_, y_, -y_, x_, w_, z_, -x_, -y_, -z_, w_}};
+        return matrix4x4{{1.0f - 2.0f * y_ * y_ - 2.0f * z_ * z_, 2.0f * x_ * y_ + 2.0f * w_ * z_, 2.0f * x_ * z_ - 2.0f * w_ * y_, 0.0f,
+                          2.0f * x_ * y_ - 2.0f * w_ * z_, 1.0f - 2.0f * x_ * x_ - 2.0f * z_ * z_, 2.0f * y_ * z_ + 2.0f * w_ * x_, 0.0f,
+                          2.0f * x_ * z_ + 2.0f * w_ * y_, 2.0f * y_ * z_ - 2.0f * w_ * x_, 1.0f - 2.0f * x_ * x_ - 2.0f * y_ * y_, 0.0f,
+                          0.0f, 0.0f, 0.0f, 1.0f}};
     }
 
     quaternion operator*(float _scalar, const quaternion &_quaternion) {

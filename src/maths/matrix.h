@@ -14,7 +14,9 @@ namespace mkr {
         std::array<float, Columns * Rows> values_;
 
     public:
-        matrix() {}
+        matrix() {
+            values_.fill(0.0f);
+        }
 
         matrix(std::array<float, Columns * Rows> _values)
                 : values_{_values} {}
@@ -34,19 +36,6 @@ namespace mkr {
         }
 
         /**
-         * Returns an identity matrix.
-         * @return An identity matrix.
-         * @warning This function is only defined for square matrices.
-         */
-        static constexpr matrix identity() requires is_square_matrix {
-            matrix result;
-            for (size_t i = 0; i < Columns; ++i) {
-                result[i][i] = 1.0f;
-            }
-            return result;
-        }
-
-        /**
          * Returns a diagonal matrix.
          * @return A diagonal matrix.
          * @warning This function is only defined for square matrices.
@@ -57,6 +46,15 @@ namespace mkr {
                 result[i][i] = _value;
             }
             return result;
+        }
+
+        /**
+         * Returns an identity matrix.
+         * @return An identity matrix.
+         * @warning This function is only defined for square matrices.
+         */
+        static constexpr matrix identity() requires is_square_matrix {
+            return diagonal(1.0f);
         }
 
         inline const float *operator[](size_t _column) const {
@@ -147,27 +145,22 @@ namespace mkr {
          * @param _padding The padding for each element so that it is printed aligned
          * @return A string representation of this matrix.
          */
-        [[nodiscard]] std::string to_string(const int _precision = 3, const int _padding = 5) const {
+        [[nodiscard]] std::string to_string(const int _precision = 4) const {
             std::ostringstream out;
             out.precision(_precision);
             out << std::fixed;
-
             for (size_t i = 0; i < Rows; ++i) {
                 for (size_t j = 0; j < Columns; ++j) {
-                    out << std::setw(_precision + _padding) << (*this)[j][i] << ",";
+                    out << (*this)[j][i];
+                    if (j < Columns - 1) { out << ", "; }
                 }
                 out << '\n';
             }
-
             return out.str();
         }
 
-        friend std::ostream &operator<<(std::ostream &stream, const matrix<Columns, Rows> &mat) {
-            stream << "[Matrix"
-                   << std::to_string(Columns)
-                   << "x" << std::to_string(Rows) << "]\n"
-                   << mat.to_string();
-            return stream;
+        friend std::ostream &operator<<(std::ostream &_stream, const matrix<Columns, Rows> &_matrix) {
+            return _stream << _matrix.to_string();
         }
     };
 

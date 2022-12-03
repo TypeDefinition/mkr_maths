@@ -14,8 +14,8 @@ namespace mkr {
         static const vector2 down;
         static const vector2 left;
         static const vector2 right;
-        static const vector2 x_direction;
-        static const vector2 y_direction;
+        static const vector2 x_axis;
+        static const vector2 y_axis;
 
         /// The x component.
         float x_;
@@ -57,11 +57,6 @@ namespace mkr {
          * @return A normalised copy of this vector.
          */
         [[nodiscard]] vector2 normalised() const;
-
-        /**
-         * Sets this vector to (0, 0).
-         */
-        void zeroise();
 
         /**
          * Checks if this vector is a zero vector.
@@ -122,5 +117,17 @@ namespace mkr {
         [[nodiscard]] float angle_between(const vector2 &_vector) const;
 
         friend vector2 operator*(float _scalar, const vector2 &_vector);
+
+        [[nodiscard]] std::string to_string(const int _precision = 4) const {
+            std::ostringstream out;
+            out.precision(_precision);
+            out << std::fixed;
+            out << x_ << ", " << y_;
+            return out.str();
+        }
+
+        friend std::ostream &operator<<(std::ostream &_stream, const vector2 & _vector) {
+            return _stream << _vector.to_string();
+        }
     };
 }

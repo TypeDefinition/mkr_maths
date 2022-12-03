@@ -121,11 +121,6 @@ namespace mkr {
         [[nodiscard]] float dot(const quaternion &_quaternion) const;
 
         /**
-         * Make this a zero quaternion.
-         */
-        void zeroise();
-
-        /**
          * Normalise this quaternion.
          */
         void normalise();
@@ -198,10 +193,9 @@ namespace mkr {
          * Get this quaternion as a rotation in radians, around an axis.
          * @param _angle The angle of rotation result.
          * @param _rotation_axis The axis of rotation result.
-         * @return Returns true if this quaternion is a rotation quaternion, otherwise returns false.
          * @warning This quaternion must be a rotational (unit) quaternion.
          */
-        void to_axis_angle(float &_angle, vector3 &_rotation_axis) const;
+        void to_axis_angle(vector3 &_rotation_axis, float &_angle) const;
 
         /**
          * Get this quaternion as a matrix4x4 rotation matrix.
@@ -211,5 +205,17 @@ namespace mkr {
         [[nodiscard]] matrix4x4 to_rotation_matrix() const;
 
         friend quaternion operator*(float _scalar, const quaternion &_quaternion);
+
+        [[nodiscard]] std::string to_string(const int _precision = 4) const {
+            std::ostringstream out;
+            out.precision(_precision);
+            out << std::fixed;
+            out << w_ << "," << x_ << ", " << y_ << ", " << z_;
+            return out.str();
+        }
+
+        friend std::ostream &operator<<(std::ostream &_stream, const quaternion &_quaternion) {
+            return _stream << _quaternion.to_string();
+        }
     };
 }
