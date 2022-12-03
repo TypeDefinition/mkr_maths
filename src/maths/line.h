@@ -9,6 +9,10 @@ namespace mkr {
      */
     class line {
     public:
+        static const line x_axis;
+        static const line y_axis;
+        static const line z_axis;
+
         /**
          * A point on the line.
          */
@@ -17,10 +21,6 @@ namespace mkr {
          * The direction of the line.
          */
         vector3 direction_;
-
-        static const line x_axis;
-        static const line y_axis;
-        static const line z_axis;
 
         /**
          * Constructs the line.

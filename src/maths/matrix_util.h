@@ -560,7 +560,6 @@ namespace mkr {
              * |  Z1  Z2  Z3   0   |
              * |   0   0   0   1   |
              *
-             *
              * View Matrix = Orientation Matrix * Translation Matrix:
              * |  X1  X2  X3  -T·X | --------- -T·X means -T.dot(X)
              * |  Y1  Y2  Y3  -T·Y |

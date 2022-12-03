@@ -9,13 +9,6 @@ namespace mkr {
      */
     class vector3 {
     public:
-        /// The x component.
-        float x_;
-        /// The y component.
-        float y_;
-        /// The z component.
-        float z_;
-
         static const vector3 zero;
         static const vector3 up;
         static const vector3 down;
@@ -26,6 +19,13 @@ namespace mkr {
         static const vector3 x_direction;
         static const vector3 y_direction;
         static const vector3 z_direction;
+
+        /// The x component.
+        float x_;
+        /// The y component.
+        float y_;
+        /// The z component.
+        float z_;
 
         /**
          * Constructs the vector.
@@ -73,12 +73,12 @@ namespace mkr {
          * Checks if this vector is a zero vector.
          * @return Returns true if the vector is a zero vector, else return false.
          */
-        [[nodiscard]] bool is_zero_vector() const;
+        [[nodiscard]] bool is_zero() const;
 
         /**
          * Checks if this vector is a unit vector.
          */
-        [[nodiscard]] bool is_unit_vector() const;
+        [[nodiscard]] bool is_unit() const;
 
         /**
          * Checks if 2 vectors are parallel.

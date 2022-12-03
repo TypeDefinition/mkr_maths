@@ -9,11 +9,6 @@ namespace mkr {
      */
     class vector2 {
     public:
-        /// The x component.
-        float x_;
-        /// The y component.
-        float y_;
-
         static const vector2 zero;
         static const vector2 up;
         static const vector2 down;
@@ -21,6 +16,11 @@ namespace mkr {
         static const vector2 right;
         static const vector2 x_direction;
         static const vector2 y_direction;
+
+        /// The x component.
+        float x_;
+        /// The y component.
+        float y_;
 
         /**
          * Constructs the vector.
@@ -67,12 +67,12 @@ namespace mkr {
          * Checks if this vector is a zero vector.
          * @return Returns true if the vector is a zero vector, else return false.
          */
-        [[nodiscard]] bool is_zero_vector() const;
+        [[nodiscard]] bool is_zero() const;
 
         /**
          * Checks if this vector is a unit vector.
          */
-        [[nodiscard]] bool is_unit_vector() const;
+        [[nodiscard]] bool is_unit() const;
 
         /**
          * Checks if 2 vectors are parallel.

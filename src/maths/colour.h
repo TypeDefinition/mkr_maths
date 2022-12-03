@@ -10,15 +10,6 @@ namespace mkr {
      */
     class colour {
     public:
-        /// Red component.
-        float r_;
-        /// Green component.
-        float g_;
-        /// Blue component.
-        float b_;
-        /// Alpha component.
-        float a_;
-
         static const colour red;
         static const colour green;
         static const colour blue;
@@ -28,6 +19,15 @@ namespace mkr {
         static const colour black;
         static const colour white;
         static const colour grey;
+
+        /// Red component.
+        float r_;
+        /// Green component.
+        float g_;
+        /// Blue component.
+        float b_;
+        /// Alpha component.
+        float a_;
 
         /**
          * Constructs the colour.

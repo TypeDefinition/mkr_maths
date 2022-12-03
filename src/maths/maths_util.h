@@ -68,6 +68,13 @@ namespace mkr {
             return maths_util::max<T>(_a, maths_util::max<T>(_b, std::forward<Args>(_args)...));
         }
 
+        template<class T>
+        static T clamp(const T& _val, const T &_min, const T &_max) {
+            if (_val < _min) { return _min; }
+            if (_max < _val) { return _max; }
+            return _val;
+        }
+
         /**
          * Checks if 2 floating point numbers are approximately equal. Useful for dealing with floating point errors.
          * @tparam T The floating point type.

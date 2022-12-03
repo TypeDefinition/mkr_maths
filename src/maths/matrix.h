@@ -17,8 +17,7 @@ namespace mkr {
         matrix() {}
 
         matrix(std::array<float, Columns * Rows> _values)
-                : values_{_values} {
-        }
+                : values_{_values} {}
 
         static constexpr bool is_square_matrix = (Columns == Rows);
 

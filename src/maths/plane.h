@@ -9,6 +9,10 @@ namespace mkr {
      */
     class plane {
     public:
+        static const plane xy_plane;
+        static const plane xz_plane;
+        static const plane yz_plane;
+
         /// The normal of the plane.
         vector3 normal_;
         /// The constant value in the formula ax + by + cz + d = 0.

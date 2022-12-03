@@ -85,23 +85,23 @@ namespace mkr {
         x_ = y_ = z_ = 0.0f;
     }
 
-    bool vector3::is_zero_vector() const {
+    bool vector3::is_zero() const {
         return maths_util::approx_equal(0.0f, length_squared());
     }
 
-    bool vector3::is_unit_vector() const {
+    bool vector3::is_unit() const {
         return maths_util::approx_equal(1.0f, length_squared());
     }
 
     bool vector3::is_parallel(const vector3 &_vector) const {
-        return !is_zero_vector() &&
-               !_vector.is_zero_vector() &&
+        return !is_zero() &&
+               !_vector.is_zero() &&
                maths_util::approx_equal(0.0f, cross(_vector).length_squared());
     }
 
     bool vector3::is_perpendicular(const vector3 &_vector) const {
-        return !is_zero_vector() &&
-               !_vector.is_zero_vector() &&
+        return !is_zero() &&
+               !_vector.is_zero() &&
                maths_util::approx_equal(0.0f, dot(_vector));
     }
 
