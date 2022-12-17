@@ -525,12 +525,12 @@ namespace mkr {
          * @brief Get the view matrix given the cameras orientation and position.
          * The vectors _forward and _up are expected to be unit vectors.
          *
+         * @param _position the position in 3D space
          * @param _forward the forward unit vector
          * @param _up the up unit vector
-         * @param _position the position in 3D space
          * @return matrix4x4 the view matrix in 3D space
          */
-        static matrix4x4 view_matrix(const vector3 &_forward, const vector3 &_up, const vector3 &_position) {
+        static matrix4x4 view_matrix(const vector3 &_position, const vector3 &_forward, const vector3 &_up) {
             /**
              * The view matrix on the other hand is used to transform vertices from world-space to view-space.
              * This matrix is usually concatenated together with the object’s world matrix and the projection matrix so
@@ -632,7 +632,7 @@ namespace mkr {
             matrix4x4 mat;
             mat[1][1] = 1.0f / std::tan(_fov * 0.5f);
             mat[0][0] = mat[1][1] / _aspect_ratio;
-            mat[2][2] = (_near - _far) / (_near - _far);
+            mat[2][2] = (-_near - _far) / (_near - _far);
             mat[2][3] = 1.0f;
             mat[3][2] = (2.0f * _near * _far) / (_near - _far);
             return mat;
@@ -664,7 +664,7 @@ namespace mkr {
             return mat;
         }
 
-        matrix4x4 orthographic_matrix(float _aspect_ratio, float _ortho_size, float _near, float _far) {
+        static matrix4x4 orthographic_matrix(float _aspect_ratio, float _ortho_size, float _near, float _far) {
             /**
              * [https://en.wikipedia.org/wiki/Orthographic_projection]
              *
