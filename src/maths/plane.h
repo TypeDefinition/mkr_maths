@@ -18,21 +18,21 @@ namespace mkr {
         /// The constant value in the formula ax + by + cz + d = 0.
         float d_;
 
-        bool operator==(const plane &_plane) const;
+        bool operator==(const plane& _plane) const;
 
         /**
          * Creates a plane represented by the formula ax + by + cz + d = 0.
          * @param _normal The normal of the plane.
          * @param _d The constant value in the formula ax + by + cz + d = 0.
          */
-        plane(const vector3 &_normal, float _d);
+        plane(const vector3& _normal, float _d);
 
         /**
          * Creates a plane represented by the formula ax + by + cz + d = 0.
          * @param _normal The normal of the plane.
          * @param _point_on_plane A point of the plane.
          */
-        plane(const vector3 &_normal, const vector3 &_point_on_plane);
+        plane(const vector3& _normal, const vector3& _point_on_plane);
 
         /**
          * Creates a plane represented by the formula ax + by + cz + d = 0.
@@ -42,7 +42,7 @@ namespace mkr {
          * @param _vertex_b The second point.
          * @param _vertex_c The third point.
          */
-        plane(const vector3 &_vertex_a, const vector3 &_vertex_b, const vector3 &_vertex_c);
+        plane(const vector3& _vertex_a, const vector3& _vertex_b, const vector3& _vertex_c);
 
         /**
          * Returns a copy of the plane in the opposite direction.
@@ -60,42 +60,42 @@ namespace mkr {
          * @param _plane The plane to check against.
          * @return Returns true if the 2 planes are parallel, else return false.
          */
-        [[nodiscard]] bool is_parallel(const plane &_plane) const;
+        [[nodiscard]] bool is_parallel(const plane& _plane) const;
 
         /**
          * Checks if a line is parallel to this plane.
          * @param _line The line to check against.
          * @return Returns true if the line is parallel to this plane, else return false.
          */
-        [[nodiscard]] bool is_parallel(const line &_line) const;
+        [[nodiscard]] bool is_parallel(const line& _line) const;
 
         /**
          * Checks if a vector is parallel to this plane.
          * @param _vector The line to check against.
          * @return Returns true if the vector is parallel to this plane, else return false.
          */
-        [[nodiscard]] bool is_parallel(const vector3 &_vector) const;
+        [[nodiscard]] bool is_parallel(const vector3& _vector) const;
 
         /**
          * Checks if 2 planes are perpendicular.
          * @param _plane The plane to check against.
          * @return Returns true if the 2 planes are perpendicular, else return false.
          */
-        [[nodiscard]] bool is_perpendicular(const plane &_plane) const;
+        [[nodiscard]] bool is_perpendicular(const plane& _plane) const;
 
         /**
          * Checks if a line is perpendicular to this plane.
          * @param _line The line to check against.
          * @return Returns true if the line is perpendicular to this plane, else return false.
          */
-        [[nodiscard]] bool is_perpendicular(const line &_line) const;
+        [[nodiscard]] bool is_perpendicular(const line& _line) const;
 
         /**
          * Checks if a vector is perpendicular to this plane.
          * @param _vector The line to check against.
          * @return Returns true if the vector is perpendicular to this plane, else return false.
          */
-        [[nodiscard]] bool is_perpendicular(const vector3 &_vector) const;
+        [[nodiscard]] bool is_perpendicular(const vector3& _vector) const;
 
         /**
          * Returns the distance of this plane from the origin.
@@ -107,49 +107,49 @@ namespace mkr {
          * Returns the distance of this plane to a point.
          * @return The distance of this plane to a point.
          */
-        [[nodiscard]] float distance_to(const vector3 &_point) const;
+        [[nodiscard]] float distance_to(const vector3& _point) const;
 
         /**
          * Returns the angle between 2 planes.
          * @param _plane The plane to check against.
          * @return The angle between 2 planes.
          */
-        [[nodiscard]] float angle_between(const plane &_plane) const;
+        [[nodiscard]] float angle_between(const plane& _plane) const;
 
         /**
          * Returns the angle between this plane and a line.
          * @param _line The line to check against.
          * @return The angle between this plane and a line.
          */
-        [[nodiscard]] float angle_between(const line &_line) const;
+        [[nodiscard]] float angle_between(const line& _line) const;
 
         /**
          * Returns the angle between this plane and a directional vector.
          * @param _vector The directional vector to check against.
          * @return The angle between this plane and a directional vector.
          */
-        [[nodiscard]] float angle_between(const vector3 &_vector) const;
+        [[nodiscard]] float angle_between(const vector3& _vector) const;
 
         /**
          * Checks if a point lies on the plane.
          * @param _point The point to check.
          * @return Returns true if the point lies on the plane, else return false.
          */
-        [[nodiscard]] bool contains(const vector3 &_point) const;
+        [[nodiscard]] bool contains(const vector3& _point) const;
 
         /**
          * Checks if a line lies on the plane.
          * @param _line The line to check.
          * @return Returns true if the line lies on the plane, else return false.
          */
-        [[nodiscard]] bool contains(const line &_line) const;
+        [[nodiscard]] bool contains(const line& _line) const;
 
         /**
          * Returns the point on this plane closest to a given point.
          * @param _point The given point.
          * @return The point on this plane closest to a given point.
          */
-        [[nodiscard]] vector3 closest_point(const vector3 &_point) const;
+        [[nodiscard]] vector3 closest_point(const vector3& _point) const;
 
         /**
          * Return the intersection point between this plane and a given line.
@@ -157,7 +157,7 @@ namespace mkr {
          * @return The intersection point between this plane and a given line.
          * @attention Returns std::nullopt if the line does not intersect this plane.
          */
-        [[nodiscard]] std::optional<vector3> intersect_point(const line &_line) const;
+        [[nodiscard]] std::optional<vector3> intersect_point(const line& _line) const;
 
         /**
          * Return the line of intersection between 2 planes.
@@ -165,6 +165,6 @@ namespace mkr {
          * @return The line of intersection between 2 planes.
          * @attention Returns std::nullopt if the 2 planes do not intersect.
          */
-        [[nodiscard]] std::optional<line> intersect_line(const plane &_plane) const;
+        [[nodiscard]] std::optional<line> intersect_line(const plane& _plane) const;
     };
 }

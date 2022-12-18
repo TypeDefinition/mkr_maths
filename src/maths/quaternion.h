@@ -56,7 +56,7 @@ namespace mkr {
          * @return The rotated point.
          * @warning _rotation_axis must be a unit vector.
          */
-        [[nodiscard]] static vector3 rotate(const vector3 &_point, float _angle, const vector3 &_rotation_axis);
+        [[nodiscard]] static vector3 rotate(const vector3& _point, float _angle, const vector3& _rotation_axis);
 
         /**
          * Spherical Linear Interpolation between 2 rotational quaternions.
@@ -67,7 +67,7 @@ namespace mkr {
          * @return The interpolated rotation.
          * @warning _start and _end must be rotational (unit) quaternions.
          */
-        [[nodiscard]] static quaternion slerp(const quaternion &_start, const quaternion &_end, float _ratio, bool _clamp_ratio = false);
+        [[nodiscard]] static quaternion slerp(const quaternion& _start, const quaternion& _end, float _ratio, bool _clamp_ratio = false);
 
         /**
          * Constructs a quaternion.
@@ -76,14 +76,14 @@ namespace mkr {
          * @param _y The Y component of the quaternion. It is part of the vector component.
          * @param _z The Z component of the quaternion. It is part of the vector component.
          */
-        quaternion(float _w = 1.0f, float _x = 0.0f, float _y = 0.0f, float _z = 0.0f);
+        explicit quaternion(float _w = 1.0f, float _x = 0.0f, float _y = 0.0f, float _z = 0.0f);
 
         /**
          * Constructs a quaternion.
          * @param _w The W component of the quaternion. It is the scalar component.
          * @param _xyz The XYZ component of the quaternion. It is the vector component.
          */
-        quaternion(float _w, const vector3 &_xyz);
+        explicit quaternion(float _w, const vector3& _xyz);
 
         /**
          * Constructs a rotational quaternion.
@@ -91,34 +91,34 @@ namespace mkr {
          * @param _angle The rotation angle.
          * @warning _rotation_axis must be a unit vector.
          */
-        quaternion(const vector3 &_rotation_axis, float _angle);
+        explicit quaternion(const vector3& _rotation_axis, float _angle);
 
-        bool operator==(const quaternion &_rhs) const;
+        bool operator==(const quaternion& _rhs) const;
 
-        bool operator!=(const quaternion &_rhs) const;
+        bool operator!=(const quaternion& _rhs) const;
 
-        quaternion operator+(const quaternion &_rhs) const;
+        quaternion operator+(const quaternion& _rhs) const;
 
-        quaternion &operator+=(const quaternion &_rhs);
+        quaternion& operator+=(const quaternion& _rhs);
 
-        quaternion operator-(const quaternion &_rhs) const;
+        quaternion operator-(const quaternion& _rhs) const;
 
-        quaternion &operator-=(const quaternion &_rhs);
+        quaternion& operator-=(const quaternion& _rhs);
 
-        quaternion operator*(const quaternion &_rhs) const;
+        quaternion operator*(const quaternion& _rhs) const;
 
-        quaternion &operator*=(const quaternion &_rhs);
+        quaternion& operator*=(const quaternion& _rhs);
 
         quaternion operator*(float _scalar) const;
 
-        quaternion &operator*=(float _scalar);
+        quaternion& operator*=(float _scalar);
 
         /**
          * Get the dot product of this quaternion and another quaternion.
          * @param _quaternion The other quaternion to calculate the dot product with.
          * @return The dot product of this quaternion and the other quaternion.
          */
-        [[nodiscard]] float dot(const quaternion &_quaternion) const;
+        [[nodiscard]] float dot(const quaternion& _quaternion) const;
 
         /**
          * Normalise this quaternion.
@@ -161,7 +161,7 @@ namespace mkr {
          * @param _rotation_axis The axis of rotation.
          * @warning _rotation_axis must be a unit vector.
          */
-        void set_rotation(const vector3 &_rotation_axis, float _angle);
+        void set_rotation(const vector3& _rotation_axis, float _angle);
 
         /**
          * Conjugate this quaternion.
@@ -195,7 +195,7 @@ namespace mkr {
          * @param _rotation_axis The axis of rotation result.
          * @warning This quaternion must be a rotational (unit) quaternion.
          */
-        void to_axis_angle(vector3 &_rotation_axis, float &_angle) const;
+        void to_axis_angle(vector3& _rotation_axis, float& _angle) const;
 
         /**
          * Get this quaternion as a matrix4x4 rotation matrix.
@@ -204,7 +204,7 @@ namespace mkr {
          */
         [[nodiscard]] matrix4x4 to_rotation_matrix() const;
 
-        friend quaternion operator*(float _scalar, const quaternion &_quaternion);
+        friend quaternion operator*(float _scalar, const quaternion& _quaternion);
 
         [[nodiscard]] std::string to_string(const int _precision = 4) const {
             std::ostringstream out;
@@ -214,7 +214,7 @@ namespace mkr {
             return out.str();
         }
 
-        friend std::ostream &operator<<(std::ostream &_stream, const quaternion &_quaternion) {
+        friend std::ostream& operator<<(std::ostream& _stream, const quaternion& _quaternion) {
             return _stream << _quaternion.to_string();
         }
     };

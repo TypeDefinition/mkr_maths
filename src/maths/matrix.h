@@ -57,15 +57,15 @@ namespace mkr {
             return diagonal(1.0f);
         }
 
-        inline const float *operator[](size_t _column) const {
+        inline const float* operator[](size_t _column) const {
             return &values_[_column * Rows];
         }
 
-        inline float *operator[](size_t _column) {
+        inline float* operator[](size_t _column) {
             return &values_[_column * Rows];
         }
 
-        bool operator==(const matrix &_rhs) const {
+        bool operator==(const matrix& _rhs) const {
             bool equal = true;
             for (size_t i = 0; i < size(); i++) {
                 equal &= maths_util::approx_equal(values_[i], _rhs.values_[i]);
@@ -73,11 +73,11 @@ namespace mkr {
             return equal;
         }
 
-        bool operator!=(const matrix &_rhs) const {
+        bool operator!=(const matrix& _rhs) const {
             return !(*this == _rhs);
         }
 
-        matrix operator+(const matrix &_rhs) const {
+        matrix operator+(const matrix& _rhs) const {
             matrix result;
             for (size_t i = 0; i < size(); ++i) {
                 result.values_[i] = values_[i] + _rhs.values_[i];
@@ -85,12 +85,12 @@ namespace mkr {
             return result;
         }
 
-        matrix &operator+=(const matrix &_rhs) {
+        matrix& operator+=(const matrix& _rhs) {
             *this = (*this) + _rhs;
             return *this;
         }
 
-        matrix operator-(const matrix &_rhs) const {
+        matrix operator-(const matrix& _rhs) const {
             matrix result;
             for (size_t i = 0; i < size(); ++i) {
                 result.values_[i] = values_[i] - _rhs.values_[i];
@@ -98,13 +98,13 @@ namespace mkr {
             return result;
         }
 
-        matrix &operator-=(const matrix &_rhs) {
+        matrix& operator-=(const matrix& _rhs) {
             *this = (*this) - _rhs;
             return *this;
         }
 
         template<size_t RHSColumns>
-        matrix<RHSColumns, Rows> operator*(const matrix<RHSColumns, Columns> &_rhs) const {
+        matrix<RHSColumns, Rows> operator*(const matrix<RHSColumns, Columns>& _rhs) const {
             matrix<RHSColumns, Rows> result;
             for (size_t i = 0; i < RHSColumns; ++i) {
                 for (size_t j = 0; j < Rows; ++j) {
@@ -116,7 +116,7 @@ namespace mkr {
             return result;
         }
 
-        matrix &operator*=(const matrix &_rhs) requires is_square_matrix {
+        matrix& operator*=(const matrix& _rhs) requires is_square_matrix {
             *this = (*this) * _rhs;
             return *this;
         }
@@ -129,12 +129,12 @@ namespace mkr {
             return result;
         }
 
-        matrix &operator*=(float _scalar) {
+        matrix& operator*=(float _scalar) {
             *this = (*this) * _scalar;
             return *this;
         }
 
-        friend matrix operator*(float _scalar, const matrix &_matrix) {
+        friend matrix operator*(float _scalar, const matrix& _matrix) {
             return _matrix * _scalar;
         }
 
@@ -159,7 +159,7 @@ namespace mkr {
             return out.str();
         }
 
-        friend std::ostream &operator<<(std::ostream &_stream, const matrix<Columns, Rows> &_matrix) {
+        friend std::ostream& operator<<(std::ostream& _stream, const matrix<Columns, Rows>& _matrix) {
             return _stream << _matrix.to_string();
         }
     };

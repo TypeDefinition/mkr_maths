@@ -35,26 +35,26 @@ namespace mkr {
          */
         colour(float _r = 1.0f, float _g = 1.0f, float _b = 1.0f, float _a = 1.0f);
 
-        bool operator==(const colour &_rhs) const;
+        bool operator==(const colour& _rhs) const;
 
-        bool operator!=(const colour &_rhs) const;
+        bool operator!=(const colour& _rhs) const;
 
-        colour operator+(const colour &_rhs) const;
+        colour operator+(const colour& _rhs) const;
 
-        colour &operator+=(const colour &_rhs);
+        colour& operator+=(const colour& _rhs);
 
-        colour operator-(const colour &_rhs) const;
+        colour operator-(const colour& _rhs) const;
 
-        colour &operator-=(const colour &_rhs);
+        colour& operator-=(const colour& _rhs);
 
-        colour operator*(const colour &_rhs) const;
+        colour operator*(const colour& _rhs) const;
 
-        colour &operator*=(const colour &_rhs);
+        colour& operator*=(const colour& _rhs);
 
         colour operator*(float _scalar) const;
 
-        colour &operator*=(float _scalar);
+        colour& operator*=(float _scalar);
 
-        friend colour operator*(float _scalar, const colour &_colour);
+        friend colour operator*(float _scalar, const colour& _colour);
     };
 }

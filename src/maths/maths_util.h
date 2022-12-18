@@ -24,7 +24,7 @@ namespace mkr {
          * @return The smaller of _a and _b. If the values are equivalent, returns _a.
          */
         template<class T>
-        static const T &min(const T &_a, const T &_b) {
+        static const T& min(const T& _a, const T& _b) {
             return (_b < _a) ? _b : _a;
         }
 
@@ -38,7 +38,7 @@ namespace mkr {
          * @return The smaller of _a and _b. If the values are equivalent, returns _a.
          */
         template<class T, class ...Args>
-        static const T &min(const T &_a, const T &_b, Args &&... _args) {
+        static const T& min(const T& _a, const T& _b, Args&& ... _args) {
             return maths_util::min<T>(_a, maths_util::min<T>(_b, std::forward<Args>(_args)...));
         }
 
@@ -50,7 +50,7 @@ namespace mkr {
          * @return The larger of _a and _b. If the values are equivalent, returns _a.
          */
         template<class T>
-        static const T &max(const T &_a, const T &_b) {
+        static const T& max(const T& _a, const T& _b) {
             return (_a < _b) ? _b : _a;
         }
 
@@ -64,12 +64,12 @@ namespace mkr {
          * @return The larger of _a and _b. If the values are equivalent, returns _a.
          */
         template<class T, class ...Args>
-        static const T &max(const T &_a, const T &_b, Args &&... _args) {
+        static const T& max(const T& _a, const T& _b, Args&& ... _args) {
             return maths_util::max<T>(_a, maths_util::max<T>(_b, std::forward<Args>(_args)...));
         }
 
         template<class T>
-        static T clamp(const T &_val, const T &_min, const T &_max) {
+        static T clamp(const T& _val, const T& _min, const T& _max) {
             if (_val < _min) { return _min; }
             if (_max < _val) { return _max; }
             return _val;
@@ -83,7 +83,7 @@ namespace mkr {
          * @return Returns true if both numbers are approximately equal. Else, returns false.
          */
         template<class T>
-        static bool approx_equal(const T &_a, const T &_b) requires std::is_floating_point_v<T> {
+        static bool approx_equal(const T& _a, const T& _b) requires std::is_floating_point_v<T> {
             return std::fabs(_a - _b) <= std::numeric_limits<T>::epsilon();
         }
 
@@ -97,7 +97,7 @@ namespace mkr {
          * @return Returns true if all numbers are approximately equal. Else, returns false.
          */
         template<class T, class... Args>
-        static bool approx_equal(const T &_a, const T &_b, Args &&... _args) requires std::is_floating_point_v<T> {
+        static bool approx_equal(const T& _a, const T& _b, Args&& ... _args) requires std::is_floating_point_v<T> {
             return std::fabs(maths_util::max<T>(_a, _b, std::forward<Args>(_args)...) -
                              maths_util::min<T>(_a, _b, std::forward<Args>(_args)...)) <=
                    std::numeric_limits<T>::epsilon();

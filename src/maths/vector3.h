@@ -37,21 +37,21 @@ namespace mkr {
 
         vector3 operator-() const;
 
-        bool operator==(const vector3 &_rhs) const;
+        bool operator==(const vector3& _rhs) const;
 
-        bool operator!=(const vector3 &_rhs) const;
+        bool operator!=(const vector3& _rhs) const;
 
-        vector3 operator+(const vector3 &_rhs) const;
+        vector3 operator+(const vector3& _rhs) const;
 
-        vector3 &operator+=(const vector3 &_rhs);
+        vector3& operator+=(const vector3& _rhs);
 
-        vector3 operator-(const vector3 &_rhs) const;
+        vector3 operator-(const vector3& _rhs) const;
 
-        vector3 &operator-=(const vector3 &_rhs);
+        vector3& operator-=(const vector3& _rhs);
 
         vector3 operator*(float _scalar) const;
 
-        vector3 &operator*=(float _scalar);
+        vector3& operator*=(float _scalar);
 
         /**
          * Normalise this vector.
@@ -80,14 +80,14 @@ namespace mkr {
          * @param _vector The vector to compare to.
          * @return Returns true if the 2 vectors are parallel, else returns false.
          */
-        [[nodiscard]] bool is_parallel(const vector3 &_vector) const;
+        [[nodiscard]] bool is_parallel(const vector3& _vector) const;
 
         /**
          * Checks if 2 vectors are perpendicular.
          * @param _vector The vector to compare to.
          * @return Returns true if the 2 vectors are perpendicular, else returns false.
          */
-        [[nodiscard]] bool is_perpendicular(const vector3 &_vector) const;
+        [[nodiscard]] bool is_perpendicular(const vector3& _vector) const;
 
         /**
          * Returns the length of this vector.
@@ -106,21 +106,21 @@ namespace mkr {
          * @param _vector　The vector to dot with.
          * @return The dot product of 2 vectors.
          */
-        [[nodiscard]] float dot(const vector3 &_vector) const;
+        [[nodiscard]] float dot(const vector3& _vector) const;
 
         /**
          * Returns the projection of this vector onto another vector.
          * @param _vector The vector to project this vector onto.
          * @return The projection of this vector onto another vector.
          */
-        [[nodiscard]] vector3 project(const vector3 &_vector) const;
+        [[nodiscard]] vector3 project(const vector3& _vector) const;
 
         /**
          * Returns the angle between 2 vectors.
          * @param _vector The other vector to find the angle with.
          * @return The angle between 2 vectors.
          */
-        [[nodiscard]] float angle_between(const vector3 &_vector) const;
+        [[nodiscard]] float angle_between(const vector3& _vector) const;
 
         /**
          * Returns the result of crossing this vector with another vector.
@@ -128,9 +128,9 @@ namespace mkr {
          * @param _vector The other vector to cross with.
          * @return The cross product of 2 vectors.
          */
-        [[nodiscard]] vector3 cross(const vector3 &_vector) const;
+        [[nodiscard]] vector3 cross(const vector3& _vector) const;
 
-        friend vector3 operator*(float _scalar, const vector3 &_vector);
+        friend vector3 operator*(float _scalar, const vector3& _vector);
 
         [[nodiscard]] std::string to_string(const int _precision = 4) const {
             std::ostringstream out;
@@ -140,7 +140,7 @@ namespace mkr {
             return out.str();
         }
 
-        friend std::ostream &operator<<(std::ostream &_stream, const vector3 & _vector) {
+        friend std::ostream& operator<<(std::ostream& _stream, const vector3& _vector) {
             return _stream << _vector.to_string();
         }
     };

@@ -15,7 +15,7 @@ namespace mkr {
          * @return The transpose of a matrix.
          */
         template<size_t Columns, size_t Rows>
-        static matrix<Rows, Columns> transpose_matrix(const matrix<Columns, Rows> &_matrix) {
+        static matrix<Rows, Columns> transpose_matrix(const matrix<Columns, Rows>& _matrix) {
             matrix<Rows, Columns> mat;
             for (size_t i = 0; i < Columns; ++i) {
                 for (size_t j = 0; j < Rows; ++j) {
@@ -31,7 +31,7 @@ namespace mkr {
          * @param _matrix the matrix that will be used
          * @return float the determinant of the matrix
          */
-        static inline float determinant(const matrix1x1 &_matrix) {
+        static inline float determinant(const matrix1x1& _matrix) {
             return _matrix[0][0];
         };
 
@@ -41,7 +41,7 @@ namespace mkr {
          * @param _matrix the matrix that will be used
          * @return float the determinant of the matrix
          */
-        static inline float determinant(const matrix2x2 &_matrix) {
+        static inline float determinant(const matrix2x2& _matrix) {
             return (_matrix[0][0] * _matrix[1][1]) -
                    (_matrix[1][0] * _matrix[0][1]);
         };
@@ -52,7 +52,7 @@ namespace mkr {
          * @param _matrix the matrix that will be used
          * @return float the determinant of the matrix
          */
-        static inline float determinant(const matrix3x3 &_matrix) {
+        static inline float determinant(const matrix3x3& _matrix) {
             return (_matrix[0][0] * _matrix[1][1] * _matrix[2][2]) +
                    (_matrix[1][0] * _matrix[2][1] * _matrix[0][2]) +
                    (_matrix[2][0] * _matrix[0][1] * _matrix[1][2]) -
@@ -67,7 +67,7 @@ namespace mkr {
          * @param _matrix the matrix that will be used
          * @return float the determinant of the matrix
          */
-        static inline float determinant(const matrix4x4 &_matrix) {
+        static inline float determinant(const matrix4x4& _matrix) {
             const float m00 = _matrix[0][5] * _matrix[0][10] * _matrix[0][15] -
                               _matrix[0][5] * _matrix[0][11] * _matrix[0][14] -
                               _matrix[0][9] * _matrix[0][6] * _matrix[0][15] +
@@ -107,13 +107,13 @@ namespace mkr {
          * @return float the determinant of the matrix
          */
         template<size_t Columns>
-        static float determinant(const matrix<Columns, Columns> &_matrix) {
+        static float determinant(const matrix<Columns, Columns>& _matrix) {
             float det = 0.0f;
             for (size_t col = 0; col < Columns; ++col) {
-                int sign = 1 + ((int) col & 1) * -2; // Determine sign-ness of that iteration.
+                int sign = 1 + ((int)col & 1) * -2; // Determine sign-ness of that iteration.
                 float cofactor = _matrix[col][0];
                 float minor_det = determinant(minor_matrix(_matrix, col, 0));
-                det += (float) sign * cofactor * minor_det;
+                det += (float)sign * cofactor * minor_det;
             }
             return det;
         }
@@ -129,7 +129,7 @@ namespace mkr {
          */
         template<size_t Columns>
         static matrix<Columns - 1, Columns - 1>
-        minor_matrix(const matrix<Columns, Columns> &_matrix, size_t _cofactor_col, size_t _cofactor_row) {
+        minor_matrix(const matrix<Columns, Columns>& _matrix, size_t _cofactor_col, size_t _cofactor_row) {
             matrix<Columns - 1, Columns - 1> mat;
             for (size_t major_col = 0, minor_col = 0; major_col < Columns; ++major_col) {
                 if (major_col == _cofactor_col) continue;
@@ -149,7 +149,7 @@ namespace mkr {
          * @param _matrix the original matrix
          * @return matrix<1, 1> the cofactor matrix generated from the original matrix
          */
-        static inline matrix<1, 1> cofactor_matrix(const matrix<1, 1> &_matrix) {
+        static inline matrix<1, 1> cofactor_matrix(const matrix<1, 1>& _matrix) {
             return _matrix;
         }
 
@@ -161,13 +161,13 @@ namespace mkr {
          * @return matrix<Columns, Columns> the cofactor matrix generated from the original matrix
          */
         template<size_t Columns>
-        static matrix<Columns, Columns> cofactor_matrix(const matrix<Columns, Columns> &_matrix) {
+        static matrix<Columns, Columns> cofactor_matrix(const matrix<Columns, Columns>& _matrix) {
             matrix<Columns, Columns> mat;
             for (size_t col = 0; col < Columns; ++col) {
                 for (size_t row = 0; row < Columns; ++row) {
-                    int sign = 1 + ((int) (col + row) & 1) * -2; // Determine sign-ness of that iteration.
+                    int sign = 1 + ((int)(col + row) & 1) * -2; // Determine sign-ness of that iteration.
                     float det = determinant(minor_matrix(_matrix, col, row));
-                    mat[col][row] = (float) sign * det;
+                    mat[col][row] = (float)sign * det;
                 }
             }
             return mat;
@@ -181,7 +181,7 @@ namespace mkr {
          * @return matrix<Size, Size> the adjugate matrix gernerated from the original matrix
          */
         template<size_t Size>
-        static matrix<Size, Size> adjugate_matrix(const matrix<Size, Size> &_matrix) {
+        static matrix<Size, Size> adjugate_matrix(const matrix<Size, Size>& _matrix) {
             return transpose_matrix(cofactor_matrix(_matrix));
         }
 
@@ -192,7 +192,7 @@ namespace mkr {
          * @return bool true if the matrix has an inverse, else false
          */
         template<size_t Size>
-        static bool invertible(const matrix<Size, Size> &_matrix) {
+        static bool invertible(const matrix<Size, Size>& _matrix) {
             return !maths_util::approx_equal(0.0f, determinant(_matrix));
         }
 
@@ -202,7 +202,7 @@ namespace mkr {
          * @param _matrix the matrix to find the inverse of
          * @return std::optional<matrix1x1> the inverse matrix if it exists, else std::nullopt
          */
-        static std::optional<matrix1x1> inverse_matrix(const matrix1x1 &_matrix) {
+        static std::optional<matrix1x1> inverse_matrix(const matrix1x1& _matrix) {
             const float det = determinant(_matrix);
             if (maths_util::approx_equal(0.0f, det)) return std::nullopt;
 
@@ -217,7 +217,7 @@ namespace mkr {
          * @param _matrix the matrix to find the inverse of
          * @return std::optional<matrix2x2> the inverse matrix if it exists, else std::nullopt
          */
-        static std::optional<matrix2x2> inverse_matrix(const matrix2x2 &_matrix) {
+        static std::optional<matrix2x2> inverse_matrix(const matrix2x2& _matrix) {
             const float det = determinant(_matrix);
             if (maths_util::approx_equal(0.0f, det)) return std::nullopt;
 
@@ -234,7 +234,7 @@ namespace mkr {
          * @param _matrix the matrix to find the inverse of
          * @return std::optional<matrix3x3> the inverse matrix if it exists, else std::nullopt
          */
-        static std::optional<matrix3x3> inverse_matrix(const matrix3x3 &_matrix) {
+        static std::optional<matrix3x3> inverse_matrix(const matrix3x3& _matrix) {
             matrix3x3 mat;
             mat[0][0] = _matrix[1][1] * _matrix[2][2] - _matrix[1][2] * _matrix[2][1];
             mat[1][0] = -(_matrix[1][0] * _matrix[2][2] - _matrix[1][2] * _matrix[2][0]);
@@ -260,7 +260,7 @@ namespace mkr {
          * @param _matrix the matrix to find the inverse of
          * @return std::optional<matrix4x4> the inverse matrix if it exists, else std::nullopt
          */
-        static std::optional<matrix4x4> inverse_matrix(const matrix4x4 &_matrix) {
+        static std::optional<matrix4x4> inverse_matrix(const matrix4x4& _matrix) {
             matrix4x4 mat;
             mat[0][0] = _matrix[0][5] * _matrix[0][10] * _matrix[0][15] -
                         _matrix[0][5] * _matrix[0][11] * _matrix[0][14] -
@@ -375,7 +375,7 @@ namespace mkr {
          * @return std::optional<matrix<Columns, Columns>> the inverse matrix if it exists, else std::nullopt
          */
         template<size_t Columns>
-        static std::optional<matrix<Columns, Columns>> inverse_matrix(const matrix<Columns, Columns> &_matrix) {
+        static std::optional<matrix<Columns, Columns>> inverse_matrix(const matrix<Columns, Columns>& _matrix) {
             const float det = determinant(_matrix);
             if (maths_util::approx_equal(0.0f, det)) return std::nullopt;
             return 1.0f / det * adjugate_matrix(_matrix);
@@ -387,7 +387,7 @@ namespace mkr {
          * @param _translation the translation vectors data that will be used
          * @return matrix4x4 the homogeneous translation matrix
          */
-        static matrix4x4 translation_matrix(const vector3 &_translation) {
+        static matrix4x4 translation_matrix(const vector3& _translation) {
             /**
              * Translation Matrix
              * |   1   0   0   x   |
@@ -476,7 +476,7 @@ namespace mkr {
          * @param _euler_angles the euler angles to the XYZ axis
          * @return matrix4x4 homogeneous rotation matrix about the 3 XYZ-axis.
          */
-        static matrix4x4 rotation_matrix(const vector3 &_euler_angles) {
+        static matrix4x4 rotation_matrix(const vector3& _euler_angles) {
             return rotation_matrix_x(_euler_angles.x_) *
                    rotation_matrix_y(_euler_angles.y_) *
                    rotation_matrix_z(_euler_angles.z_);
@@ -488,7 +488,7 @@ namespace mkr {
          * @param _scale the vector representating the scale of the object in XYZ
          * @return matrix4x4 
          */
-        static matrix4x4 scale_matrix(const vector3 &_scale) {
+        static matrix4x4 scale_matrix(const vector3& _scale) {
             /**
              * Scale Matrix
              * |   x   0   0   0   |
@@ -513,9 +513,9 @@ namespace mkr {
          * @param _scale the scale of the object in 3D space
          * @return matrix4x4 the Homogeneous matrix generated
          */
-        static matrix4x4 model_matrix(const vector3 &_translation,
-                                      const vector3 &_euler_angles,
-                                      const vector3 &_scale) {
+        static matrix4x4 model_matrix(const vector3& _translation,
+                                      const vector3& _euler_angles,
+                                      const vector3& _scale) {
             return translation_matrix(_translation) *
                    rotation_matrix(_euler_angles) *
                    scale_matrix(_scale);
@@ -530,7 +530,7 @@ namespace mkr {
          * @param _up the up unit vector
          * @return matrix4x4 the view matrix in 3D space
          */
-        static matrix4x4 view_matrix(const vector3 &_position, const vector3 &_forward, const vector3 &_up) {
+        static matrix4x4 view_matrix(const vector3& _position, const vector3& _forward, const vector3& _up) {
             /**
              * The view matrix on the other hand is used to transform vertices from world-space to view-space.
              * This matrix is usually concatenated together with the object’s world matrix and the projection matrix so

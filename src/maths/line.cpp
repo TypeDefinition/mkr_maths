@@ -5,42 +5,42 @@ namespace mkr {
     const line line::y_axis{vector3::zero, vector3::y_axis};
     const line line::z_axis{vector3::zero, vector3::z_axis};
 
-    line::line(const vector3 &_point, const vector3 &_direction)
+    line::line(const vector3& _point, const vector3& _direction)
             : point_(_point), direction_(_direction) {}
 
-    bool line::operator==(const line &_line) const {
+    bool line::operator==(const line& _line) const {
         return is_parallel(_line) && contains(_line.point_);
     }
 
-    bool line::is_parallel(const line &_line) const {
+    bool line::is_parallel(const line& _line) const {
         return direction_.is_parallel(_line.direction_);
     }
 
-    bool line::is_parallel(const vector3 &_vector) const {
+    bool line::is_parallel(const vector3& _vector) const {
         return direction_.is_parallel(_vector);
     }
 
-    bool line::is_perpendicular(const line &_line) const {
+    bool line::is_perpendicular(const line& _line) const {
         return direction_.is_perpendicular(_line.direction_);
     }
 
-    bool line::is_perpendicular(const vector3 &_vector) const {
+    bool line::is_perpendicular(const vector3& _vector) const {
         return direction_.is_perpendicular(_vector);
     }
 
-    float line::angle_between(const line &_line) const {
+    float line::angle_between(const line& _line) const {
         return direction_.angle_between(_line.direction_);
     }
 
-    float line::angle_between(const vector3 &_vector) const {
+    float line::angle_between(const vector3& _vector) const {
         return direction_.angle_between(_vector);
     }
 
-    bool line::contains(const vector3 &_point) const {
+    bool line::contains(const vector3& _point) const {
         return (point_ == _point) || (_point - point_).is_parallel(direction_);
     }
 
-    vector3 line::closest_point(const vector3 &_point) const {
+    vector3 line::closest_point(const vector3& _point) const {
         /**
          * Let the given point be P.
          * Let the closest point to P that lies on the line be C.

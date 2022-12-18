@@ -4,7 +4,7 @@ namespace mkr {
     const quaternion quaternion::zero = quaternion{0.0f, 0.0f, 0.0f, 0.0f};
     const quaternion quaternion::identity = quaternion{1.0f, 0.0f, 0.0f, 0.0f};
 
-    vector3 quaternion::rotate(const vector3 &_point, float _angle, const vector3 &_rotation_axis) {
+    vector3 quaternion::rotate(const vector3& _point, float _angle, const vector3& _rotation_axis) {
         /**
          * Rotation Formula:
          * R * P * R.Inverse
@@ -15,7 +15,7 @@ namespace mkr {
         return vector3{result.x_, result.y_, result.z_};
     }
 
-    quaternion quaternion::slerp(const quaternion &_start, const quaternion &_end, float _ratio, bool _clamp_ratio) {
+    quaternion quaternion::slerp(const quaternion& _start, const quaternion& _end, float _ratio, bool _clamp_ratio) {
         const float ratio = _clamp_ratio ? maths_util::clamp(_ratio, 0.0f, 1.0f) : _ratio;
 
         /**
@@ -48,43 +48,43 @@ namespace mkr {
     quaternion::quaternion(float _w, float _x, float _y, float _z)
             : w_(_w), x_(_x), y_(_y), z_(_z) {}
 
-    quaternion::quaternion(float _w, const vector3 &_xyz)
+    quaternion::quaternion(float _w, const vector3& _xyz)
             : w_(_w), x_(_xyz.x_), y_(_xyz.y_), z_(_xyz.z_) {}
 
-    quaternion::quaternion(const vector3 &_rotation_axis, float _angle) {
+    quaternion::quaternion(const vector3& _rotation_axis, float _angle) {
         set_rotation(_rotation_axis, _angle);
     }
 
-    bool quaternion::operator==(const quaternion &_rhs) const {
+    bool quaternion::operator==(const quaternion& _rhs) const {
         return maths_util::approx_equal(w_, _rhs.w_) &&
                maths_util::approx_equal(x_, _rhs.x_) &&
                maths_util::approx_equal(y_, _rhs.y_) &&
                maths_util::approx_equal(z_, _rhs.z_);
     }
 
-    bool quaternion::operator!=(const quaternion &_rhs) const {
+    bool quaternion::operator!=(const quaternion& _rhs) const {
         return !((*this) == _rhs);
     }
 
-    quaternion quaternion::operator+(const quaternion &_rhs) const {
+    quaternion quaternion::operator+(const quaternion& _rhs) const {
         return quaternion{w_ + _rhs.w_, x_ + _rhs.x_, y_ + _rhs.y_, z_ + _rhs.z_};
     }
 
-    quaternion &quaternion::operator+=(const quaternion &_rhs) {
+    quaternion& quaternion::operator+=(const quaternion& _rhs) {
         *this = (*this) + _rhs;
         return *this;
     }
 
-    quaternion quaternion::operator-(const quaternion &_rhs) const {
+    quaternion quaternion::operator-(const quaternion& _rhs) const {
         return quaternion{w_ - _rhs.w_, x_ - _rhs.x_, y_ - _rhs.y_, z_ - _rhs.z_};
     }
 
-    quaternion &quaternion::operator-=(const quaternion &_rhs) {
+    quaternion& quaternion::operator-=(const quaternion& _rhs) {
         *this = (*this) - _rhs;
         return *this;
     }
 
-    quaternion quaternion::operator*(const quaternion &_rhs) const {
+    quaternion quaternion::operator*(const quaternion& _rhs) const {
         const vector3 this_vector{x_, y_, z_};
         const vector3 rhs_vector{_rhs.x_, _rhs.y_, _rhs.z_};
 
@@ -98,7 +98,7 @@ namespace mkr {
         return quaternion{w, xyz};
     }
 
-    quaternion &quaternion::operator*=(const quaternion &_rhs) {
+    quaternion& quaternion::operator*=(const quaternion& _rhs) {
         *this = (*this) * _rhs;
         return *this;
     }
@@ -107,12 +107,12 @@ namespace mkr {
         return quaternion{w_ * _scalar, x_ * _scalar, y_ * _scalar, z_ * _scalar};
     }
 
-    quaternion &quaternion::operator*=(float _scalar) {
+    quaternion& quaternion::operator*=(float _scalar) {
         *this = (*this) * _scalar;
         return *this;
     }
 
-    float quaternion::dot(const quaternion &_quaternion) const {
+    float quaternion::dot(const quaternion& _quaternion) const {
         return (w_ * _quaternion.w_) + (x_ * _quaternion.x_) + (y_ * _quaternion.y_) + (z_ * _quaternion.z_);
     }
 
@@ -170,7 +170,7 @@ namespace mkr {
         return 1 / length_squared() * conjugated();
     }
 
-    void quaternion::set_rotation(const vector3 &_rotation_axis, float _angle) {
+    void quaternion::set_rotation(const vector3& _rotation_axis, float _angle) {
         /**
          * Axis-Angle Rotation To Quaternion:
          * Quaternion = cos(a/2) + [x*sin(a/2)]i + [y*sin(a/2)]j + [z*sin(a/2)]k
@@ -182,7 +182,7 @@ namespace mkr {
         w_ = std::cos(_angle * 0.5f);
     }
 
-    void quaternion::to_axis_angle(vector3 &_rotation_axis, float &_angle) const {
+    void quaternion::to_axis_angle(vector3& _rotation_axis, float& _angle) const {
         vector3 xyz{x_, y_, z_};
         if (xyz.is_zero()) {
             _angle = 0.0f;
@@ -201,7 +201,7 @@ namespace mkr {
                           0.0f, 0.0f, 0.0f, 1.0f}};
     }
 
-    quaternion operator*(float _scalar, const quaternion &_quaternion) {
+    quaternion operator*(float _scalar, const quaternion& _quaternion) {
         return _quaternion * _scalar;
     }
 }

@@ -5,20 +5,20 @@ namespace mkr {
     const plane plane::xz_plane{vector3{0, 1, 0}, 0.0f};
     const plane plane::yz_plane{vector3{1, 0, 0}, 0.0f};
 
-    plane::plane(const vector3 &_normal, float _d)
+    plane::plane(const vector3& _normal, float _d)
             : normal_(_normal), d_(_d) {}
 
-    plane::plane(const vector3 &_normal, const vector3 &_point_on_plane)
+    plane::plane(const vector3& _normal, const vector3& _point_on_plane)
             : normal_(_normal), d_(-_normal.dot(_point_on_plane)) {}
 
-    plane::plane(const vector3 &_vertex_a, const vector3 &_vertex_b, const vector3 &_vertex_c) {
+    plane::plane(const vector3& _vertex_a, const vector3& _vertex_b, const vector3& _vertex_c) {
         vector3 edge_ab = _vertex_b - _vertex_a;
         vector3 edge_ac = _vertex_c - _vertex_a;
         normal_ = edge_ab.cross(edge_ac);
         d_ = -normal_.dot(_vertex_a);
     }
 
-    bool plane::operator==(const plane &_plane) const {
+    bool plane::operator==(const plane& _plane) const {
         // For 2 planes to be equal, they must face the same direction and be the same distance from the origin.
         return is_parallel(_plane) &&
                maths_util::approx_equal(distance_from_origin(), _plane.distance_from_origin());
@@ -32,27 +32,27 @@ namespace mkr {
         normal_ = -normal_;
     }
 
-    bool plane::is_parallel(const plane &_plane) const {
+    bool plane::is_parallel(const plane& _plane) const {
         return normal_.is_parallel(_plane.normal_);
     }
 
-    bool plane::is_parallel(const line &_line) const {
+    bool plane::is_parallel(const line& _line) const {
         return normal_.is_perpendicular(_line.direction_);
     }
 
-    bool plane::is_parallel(const vector3 &_vector) const {
+    bool plane::is_parallel(const vector3& _vector) const {
         return normal_.is_perpendicular(_vector);
     }
 
-    bool plane::is_perpendicular(const plane &_plane) const {
+    bool plane::is_perpendicular(const plane& _plane) const {
         return normal_.is_perpendicular(_plane.normal_);
     }
 
-    bool plane::is_perpendicular(const line &_line) const {
+    bool plane::is_perpendicular(const line& _line) const {
         return normal_.is_parallel(_line.direction_);
     }
 
-    bool plane::is_perpendicular(const vector3 &_vector) const {
+    bool plane::is_perpendicular(const vector3& _vector) const {
         return normal_.is_parallel(_vector);
     }
 
@@ -60,7 +60,7 @@ namespace mkr {
         return d_ / normal_.length();
     }
 
-    float plane::distance_to(const vector3 &_point) const {
+    float plane::distance_to(const vector3& _point) const {
         /**
          * We are given a point P.
          * Let's call the closest point from point P to the plane point C.
@@ -109,27 +109,27 @@ namespace mkr {
         return (normal_.dot(_point) + d_) / normal_.length();
     }
 
-    float plane::angle_between(const plane &_plane) const {
+    float plane::angle_between(const plane& _plane) const {
         return normal_.angle_between(_plane.normal_);
     }
 
-    float plane::angle_between(const vector3 &_vector) const {
+    float plane::angle_between(const vector3& _vector) const {
         return std::asin(normal_.dot(_vector) / (normal_.length() * _vector.length()));
     }
 
-    float plane::angle_between(const line &_line) const {
+    float plane::angle_between(const line& _line) const {
         return std::asin(normal_.dot(_line.direction_) / (normal_.length() * _line.direction_.length()));
     }
 
-    bool plane::contains(const vector3 &_point) const {
+    bool plane::contains(const vector3& _point) const {
         return maths_util::approx_equal(-d_, normal_.dot(_point));
     }
 
-    bool plane::contains(const line &_line) const {
+    bool plane::contains(const line& _line) const {
         return is_parallel(_line) && contains(_line.point_);
     }
 
-    vector3 plane::closest_point(const vector3 &_point) const {
+    vector3 plane::closest_point(const vector3& _point) const {
         /**
          * Let any point on the plane be represented by A.
          * Plane equation: A·N + d = 0.
@@ -160,7 +160,7 @@ namespace mkr {
         return _point + lambda * normal_;
     }
 
-    std::optional<vector3> plane::intersect_point(const line &_line) const {
+    std::optional<vector3> plane::intersect_point(const line& _line) const {
         /**
          * A plane and a line intersects at a point assuming they are not parallel.
          *
@@ -197,7 +197,7 @@ namespace mkr {
         return _line.point_ + _line.direction_ * lambda;
     }
 
-    std::optional<line> plane::intersect_line(const plane &_plane) const {
+    std::optional<line> plane::intersect_line(const plane& _plane) const {
         /**
          * 2 planes intersect at a line if they are not parallel.
          * [https://stackoverflow.com/questions/6408670/line-of-intersection-between-two-planes/17628505]

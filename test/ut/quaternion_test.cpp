@@ -111,7 +111,8 @@ TEST(quaternion_test, rotate) {
     {
         quaternion q{-vector3::z_axis * 37.0f, 7.0f * maths_util::pi};
         q.normalise();
-        vector3 axis; float angle;
+        vector3 axis;
+        float angle;
         q.to_axis_angle(axis, angle);
         EXPECT_TRUE((maths_util::pi - angle) < 0.0001f); // Hardcode a larger epsilon due to floating point error.
         EXPECT_TRUE(vector3::z_axis == axis);
