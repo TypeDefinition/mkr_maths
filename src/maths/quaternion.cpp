@@ -15,6 +15,15 @@ namespace mkr {
         return vector3{result.x_, result.y_, result.z_};
     }
 
+    vector3 quaternion::rotate(const vector3& _point, const quaternion& _rotation) {
+        /**
+         * Rotation Formula:
+         * R * P * R.Inverse
+         */
+        quaternion result = _rotation * quaternion{0.0f, _point.x_, _point.y_, _point.z_} * _rotation.conjugated();
+        return vector3{result.x_, result.y_, result.z_};
+    }
+
     quaternion quaternion::slerp(const quaternion& _start, const quaternion& _end, float _ratio, bool _clamp_ratio) {
         const float ratio = _clamp_ratio ? maths_util::clamp(_ratio, 0.0f, 1.0f) : _ratio;
 

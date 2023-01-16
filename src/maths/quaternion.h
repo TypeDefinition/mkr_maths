@@ -59,13 +59,22 @@ namespace mkr {
         [[nodiscard]] static vector3 rotate(const vector3& _point, float _angle, const vector3& _rotation_axis);
 
         /**
+         * Rotate a point.
+         * @param _point The point to rotate.
+         * @param _rotation The unit rotation.
+         * @return The rotated point.
+         * @warning _rotation must be a rotational quaternion.
+         */
+        [[nodiscard]] static vector3 rotate(const vector3& _point, const quaternion& _rotation);
+
+        /**
          * Spherical Linear Interpolation between 2 rotational quaternions.
          * @param _start The start rotation.
          * @param _end The end rotation.
          * @param _ratio The ratio to interpolate between _start and _end. A value of 0 will return _start, and a value of 1 will return _end.
          * @param _clamp_ratio If set to true, the _ratio is clamped to between 0 and 1. The default value is false.
          * @return The interpolated rotation.
-         * @warning _start and _end must be rotational (unit) quaternions.
+         * @warning _start and _end must be rotational quaternions.
          */
         [[nodiscard]] static quaternion slerp(const quaternion& _start, const quaternion& _end, float _ratio, bool _clamp_ratio = false);
 
@@ -165,27 +174,27 @@ namespace mkr {
 
         /**
          * Conjugate this quaternion.
-         * @note For rotational (unit) quaternions, the inverse is equal to the conjugate.
+         * @note For rotational quaternions, the inverse is equal to the conjugate.
          */
         void conjugate();
 
         /**
          * Get a conjugated copy of this quaternion.
          * @return A conjugated copy of this quaternion.
-         * @note For rotational (unit) quaternions, the inverse is equal to the conjugate.
+         * @note For rotational quaternions, the inverse is equal to the conjugate.
          */
         [[nodiscard]] quaternion conjugated() const;
 
         /**
          * Inverse this quaternion.
-         * @note For rotational (unit) quaternions, the inverse is equal to the conjugate.
+         * @note For rotational quaternions, the inverse is equal to the conjugate.
          */
         void inverse();
 
         /**
          * Get a inversed copy of this quaternion.
          * @return A inversed copy of this quaternion.
-         * @note For rotational (unit) quaternions, the inverse is equal to the conjugate.
+         * @note For rotational quaternions, the inverse is equal to the conjugate.
          */
         [[nodiscard]] quaternion inversed() const;
 
