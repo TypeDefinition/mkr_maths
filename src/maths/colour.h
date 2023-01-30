@@ -16,6 +16,7 @@ namespace mkr {
         static const colour black;
         static const colour white;
         static const colour grey;
+        static const colour dark_grey;
 
         /// Red component.
         float r_;

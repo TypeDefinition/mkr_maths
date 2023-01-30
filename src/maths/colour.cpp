@@ -11,6 +11,7 @@ namespace mkr {
     const colour colour::black{0.0f, 0.0f, 0.0f, 1.0f};
     const colour colour::white{1.0f, 1.0f, 1.0f, 1.0f};
     const colour colour::grey{0.25f, 0.25f, 0.25f, 1.0f};
+    const colour colour::dark_grey{0.1f, 0.1f, 0.1f, 1.0f};
 
     colour::colour(float _r, float _g, float _b, float _a)
             : r_(_r), g_(_g), b_(_b), a_(_a) {}
