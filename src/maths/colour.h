@@ -17,6 +17,17 @@ namespace mkr {
         static const colour white;
         static const colour grey;
         static const colour dark_grey;
+        
+        static constexpr colour constexpr_red() { return colour{1.0f, 0.0f, 0.0f, 1.0f}; }
+        static constexpr colour constexpr_green() { return colour{0.0f, 1.0f, 0.0f, 1.0f}; }
+        static constexpr colour constexpr_blue() { return colour{0.0f, 0.0f, 1.0f, 1.0f}; }
+        static constexpr colour constexpr_yellow() { return colour{1.0f, 1.0f, 0.0f, 1.0f}; }
+        static constexpr colour constexpr_cyan() { return colour{0.0f, 1.0f, 1.0f, 1.0f}; }
+        static constexpr colour constexpr_magenta() { return colour{1.0f, 0.0f, 1.0f, 1.0f}; }
+        static constexpr colour constexpr_black() { return colour{0.0f, 0.0f, 0.0f, 1.0f}; }
+        static constexpr colour constexpr_white() { return colour{1.0f, 1.0f, 1.0f, 1.0f}; }
+        static constexpr colour constexpr_grey() { return colour{0.25f, 0.25f, 0.25f, 1.0f}; }
+        static constexpr colour constexpr_dark_grey() { return colour{0.1f, 0.1f, 0.1f, 1.0f}; }
 
         /// Red component.
         float r_;
