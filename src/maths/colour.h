@@ -17,7 +17,7 @@ namespace mkr {
         static const colour white;
         static const colour grey;
         static const colour dark_grey;
-        
+
         static constexpr colour constexpr_red() { return colour{1.0f, 0.0f, 0.0f, 1.0f}; }
         static constexpr colour constexpr_green() { return colour{0.0f, 1.0f, 0.0f, 1.0f}; }
         static constexpr colour constexpr_blue() { return colour{0.0f, 0.0f, 1.0f, 1.0f}; }
@@ -45,7 +45,8 @@ namespace mkr {
          * @param _b The blue component of the colour.
          * @param _a The alpha component of the colour.
          */
-        colour(float _r = 1.0f, float _g = 1.0f, float _b = 1.0f, float _a = 1.0f);
+        constexpr colour(float _r = 1.0f, float _g = 1.0f, float _b = 1.0f, float _a = 1.0f)
+                : r_(_r), g_(_g), b_(_b), a_(_a) {}
 
         bool operator==(const colour& _rhs) const;
 

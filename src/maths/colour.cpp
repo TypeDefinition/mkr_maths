@@ -13,9 +13,6 @@ namespace mkr {
     const colour colour::grey{0.25f, 0.25f, 0.25f, 1.0f};
     const colour colour::dark_grey{0.1f, 0.1f, 0.1f, 1.0f};
 
-    colour::colour(float _r, float _g, float _b, float _a)
-            : r_(_r), g_(_g), b_(_b), a_(_a) {}
-
     bool colour::operator==(const colour& _rhs) const {
         return maths_util::approx_equal(r_, _rhs.r_) &&
                maths_util::approx_equal(g_, _rhs.g_) &&
