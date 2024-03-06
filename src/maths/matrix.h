@@ -49,6 +49,20 @@ namespace mkr {
         }
 
         /**
+         * @brief Returns the transpose of a matrix.
+         * @return The transpose of a matrix.
+         */
+        matrix<Rows, Columns> transposed() const {
+            matrix<Rows, Columns> mat;
+            for (size_t i = 0; i < Columns; ++i) {
+                for (size_t j = 0; j < Rows; ++j) {
+                    mat[j][i] = (*this)[i][j];
+                }
+            }
+            return mat;
+        }
+
+        /**
          * Returns an identity matrix.
          * @return An identity matrix.
          * @warning This function is only defined for square matrices.

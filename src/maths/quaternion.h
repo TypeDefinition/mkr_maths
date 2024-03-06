@@ -97,7 +97,7 @@ namespace mkr {
         /**
          * Constructs a rotational quaternion.
          * @param _rotation_axis The unit rotation axis.
-         * @param _angle The rotation angle.
+         * @param _angle The rotation angle in radians.
          * @warning _rotation_axis must be a unit vector.
          */
         explicit quaternion(const vector3& _rotation_axis, float _angle);

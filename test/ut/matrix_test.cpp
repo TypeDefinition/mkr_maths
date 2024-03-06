@@ -114,11 +114,11 @@ TEST(matrix_test, transpose) {
                      8.0f, 10.0f, 12.0f}};
         matrix2x3 b{{2.0f, 6.0f, 10.0f,
                      4.0f, 8.0f, 12.0f}};
-        EXPECT_TRUE(matrix_util::transpose_matrix(a) == b);
+        EXPECT_TRUE(a.transposed() == b);
     }
 
     {
-        EXPECT_TRUE((matrix<10, 10>::identity() == matrix_util::transpose_matrix(matrix<10, 10>::identity())));
+        EXPECT_TRUE((matrix<10, 10>::identity() == matrix<10, 10>::identity().transposed()));
     }
 }
 

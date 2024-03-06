@@ -11,21 +11,6 @@ namespace mkr {
         matrix_util() = delete;
 
         /**
-         * @brief Returns the transpose of a matrix.
-         * @return The transpose of a matrix.
-         */
-        template<size_t Columns, size_t Rows>
-        static matrix<Rows, Columns> transpose_matrix(const matrix<Columns, Rows>& _matrix) {
-            matrix<Rows, Columns> mat;
-            for (size_t i = 0; i < Columns; ++i) {
-                for (size_t j = 0; j < Rows; ++j) {
-                    mat[j][i] = _matrix[i][j];
-                }
-            }
-            return mat;
-        }
-
-        /**
          * @brief Get the determinant of a 1 by 1 matrix
          *
          * @param _matrix the matrix that will be used
@@ -523,15 +508,16 @@ namespace mkr {
 
         /**
          * @brief Get the view matrix given the cameras orientation and position.
-         * The vectors _forward and _up are expected to be unit vectors.
          *
          * @param _position the position in 3D space
-         * @param _forward the forward unit vector
-         * @param _up the up unit vector
+         * @param _forward the forward vector (where the camera is facing)
+         * @param _up the up vector (where the top of the camera is facing)
          * @return matrix4x4 the view matrix in 3D space
          */
         static matrix4x4 view_matrix(const vector3& _position, const vector3& _forward, const vector3& _up) {
             /**
+             * Local Space --(Model Matrix)--> World Space --(View Matrix)--> View Space --(Projection Matrix)--> Clip Space --(Perspective Divide)--> NDC --(Viewport Transform)--> Screen Space
+             *
              * The view matrix on the other hand is used to transform vertices from world-space to view-space.
              * This matrix is usually concatenated together with the object’s world matrix and the projection matrix so
              * that vertices can be transformed from object-space directly to clip-space in the vertex program.
@@ -549,34 +535,28 @@ namespace mkr {
              * |   0   0   0   1   |
              *
              * The second part is orientation.
-             * Once again, our camera has the orientation of (1, 1, 1) relative to what our player sees, so we need to transform everything else to the camera's orientation (view-space).
-             * To do that, simply multiply the transformation matrix of everything by the inverse of our camera's orientation (basic linear algebra).
-             * And we also know that since our camera's orientation matrix is orthogonal (3 orthonormal axes), the inverse is simply the transpose (basic linear algebra).
-             * For our convention, x-axis points left, y-axis points up, z-axis points forward.
+             * By convention, OpenGL's view space is defined with the camera at origin looking at -z direction (right-hand rule), where x points to the right, y points up, and z points out of the screen.
+             * So because we need to convert our camera from looking at the z direction to looking at the -z direction, the basis of our camera's coordinate system changes from (left, up, forward) to (right, up, forward).
+             *
+             * In order to transform a coordinate from world space into view space, what we need to do is to apply the dot product of the coordinate onto each of the 3 axes of the camera's basis.
+             * Essentially, we can think of it as saying "how much along our each of camera's axes is this coordinate?".
              *
              * Orientation Matrix:
-             * |  X1  X2  X3   0   |
-             * |  Y1  Y2  Y3   0   |
-             * |  Z1  Z2  Z3   0   |
-             * |   0   0   0   1   |
+             * |  Rx   Ry   Rz  0  | --------- When multiplied with a homogenous coordinate P, this is equivalent to | R·P |.
+             * |  Ux   Uy   Uz  0  |                                                                                 | U·P |
+             * |  Bx   By   Bz  0  |                                                                                 | B·P |
+             * |  0    0    0   1  |                                                                                 |  1  |
              *
              * View Matrix = Orientation Matrix * Translation Matrix:
-             * |  X1  X2  X3  -T·X | --------- -T·X means -T.dot(X)
-             * |  Y1  Y2  Y3  -T·Y |
-             * |  Z1  Z2  Z3  -T·Z |
-             * |   0   0   0   1   |
-             *
-             * IMPORTANT NOTE:
-             * Normalized device coordinates (NDCs) make up a coordinate system that describes positions on a virtual plotting device.
-             * The lower left corner corresponds to (0,0), and the upper right corner corresponds to (1,1).
-             *
-             * By convention, OpenGL is a right-handed system. However, in normalized device coordinates (NDC) OpenGL actually
-             * uses a left-handed system (the projection matrix switches the handedness). Therefore to handle this switch,
-             * we use the right vector in our orientation matrix instead of the left vector.
+             * |  Rx  Ry   Rz  -T·R  | --------- -T·R means -T.dot(R)
+             * |  Ux  Uy   Uz  -T·U  |
+             * |  Bx  By   Bz  -T·B  |
+             * |  0   0    0    1    |
              */
 
-            const vector3 right = _forward.cross(_up);
-            const vector3 up = right.cross(_forward); // We recalculate the up vector again just in case it wasn't actually perpendicular.
+            const vector3 backward = -_forward.normalised();
+            const vector3 right = _forward.cross(_up).normalised();
+            const vector3 up = backward.cross(right);
 
             matrix4x4 mat = matrix4x4::identity();
 
@@ -588,79 +568,85 @@ namespace mkr {
             mat[1][1] = up.y_;
             mat[2][1] = up.z_;
 
-            mat[0][2] = _forward.x_;
-            mat[1][2] = _forward.y_;
-            mat[2][2] = _forward.z_;
+            mat[0][2] = backward.x_;
+            mat[1][2] = backward.y_;
+            mat[2][2] = backward.z_;
 
             mat[3][0] = -_position.dot(right);
             mat[3][1] = -_position.dot(up);
-            mat[3][2] = -_position.dot(_forward);
+            mat[3][2] = -_position.dot(backward);
 
             return mat;
         }
 
+        /**
+         * @brief Construct a perspective matrix based on an aspect ratio, field of view, near plane and far plane.
+         *
+         * @param _aspect_ratio the aspect ratio
+         * @param _fov the field of view
+         * @param _near the near plane
+         * @param _far the far plane
+         * @return a matrix4x4 perspective matrix
+         */
         static matrix4x4 perspective_matrix(float _aspect_ratio, float _fov, float _near, float _far) {
             /**
+             * Background Knowledge Required:
+             *
+             * Local Space --(Model Matrix)--> World Space --(View Matrix)--> View Space --(Projection Matrix)--> Clip Space --(Perspective Divide)--> NDC --(Viewport Transform)--> Screen Space
+             *
+             * To convert from clip space to NDC, OpenGL performs perspective divide.
+             * That is to say, the final X, Y, Z of the homogenous coordinates are divided by W.
+             * From: Clip Space = | X |    To:  NDC = | X/W |
+             *                    | Y |               | Y/W |
+             *                    | Z |               | Z/W |
+             *                    | W |
+             *
+             * The range of normalized device coordinates (NDC) were designed with the limitations of IEEE 754 floating points in mind.
+             * A float is most precise between -1 to 1. Around 2 billion of the 4 billion possible permutations of the 32 bits are used to represent the range -1 to 1.
+             * Thus, the range of NDC is [-1, 1] in all 3 axes.
+             *
+             * Perspective Matrix:
              * Written Explanation:
              * [https://ogldev.org/www/tutorial12/tutorial12.html]
              *
              * Video Explanation:
-             * [https://www.youtube.com/watch?v=LhQ85bPCAJ8]
-             * [https://www.youtube.com/watch?v=md3jFANT3UM]
+             * [https://www.youtube.com/watch?v=LhQ85bPCAJ8] (Part 1)
+             * [https://www.youtube.com/watch?v=md3jFANT3UM] (Part 2)
              *
              * AR  = Aspect Ratio
              * FOV = Vertical Field of View (Between 0 to π)
              * N   = Near Plane
              * F   = Far Plane
              *
-             * Perspective Matrix:
+             * Perspective Matrix (as per the above tutorials):
              * | 1/(tan(FOV/2) * AR)         0                0              0       |
              * |          0            1/tan(FOV/2)           0              0       |
              * |          0                  0          (-N-F)/(N-F)   (2*N*F)(N-F)  |
              * |          0                  0                1              0       |
              *
-             * Background Knowledge Required:
-             * - OpenGL performs perspective divide. The final X, Y, Z of the homogenous coordinates are divided by W. | X |
-             *                                                                                                         | Y |
-             *                                                                                                         | Z |
-             *                                                                                                         | W |
-             * - The range of NDC coordinates were designed with the limitations of IEEE 754 floating points in mind.
-             *   A float is most precise between -1 to 1. Around 2 billion of the 4 billion possible permutations of the 32 bits
-             *   are used to represent the range -1 to 1.
+             *
+             * HOWEVER, by convention, OpenGL is a right-handed coordinate system from local space to clip space, but left-handed in NDC.
+             * To solve that, we need to negate the z value of the homogenous coordinate we multiply this matrix with.
+             *
+             * Negating 1 to -1, means that when z is copied into w in the clip space coordinate, w = -z;
+             * Negating (-N-F)/(N-F) negates the z value copied into z in the clip space coordinate.
+             *
+             * Left-Handed Perspective Matrix (Mat[2][2] and Mat[2][3] are negated):
+             * | 1/(tan(FOV/2) * AR)         0                0              0       |
+             * |          0            1/tan(FOV/2)           0              0       |
+             * |          0                  0           (N+F)/(N-F)    (2*N*F)(N-F) |
+             * |          0                  0               -1              0       |
              */
 
+            const float tan_fov = std::tan(_fov * 0.5f);
+
             matrix4x4 mat;
-            mat[1][1] = 1.0f / std::tan(_fov * 0.5f);
-            mat[0][0] = mat[1][1] / _aspect_ratio;
-            mat[2][2] = (-_near - _far) / (_near - _far);
-            mat[2][3] = 1.0f;
+            mat[0][0] = 1.0f / (_aspect_ratio * tan_fov);
+            mat[1][1] = 1.0f / tan_fov;
+            mat[2][2] = (_near + _far) / (_near - _far);
             mat[3][2] = (2.0f * _near * _far) / (_near - _far);
-            return mat;
-        }
+            mat[2][3] = -1.0f;
 
-        static matrix4x4 orthographic_matrix(float _left, float _right, float _top, float _bottom,
-                                             float _near, float _far) {
-            /**
-             * [https://en.wikipedia.org/wiki/Orthographic_projection]
-             *
-             * The view box is translated such that its centre is at the origin, then it is scaled to the unit cube which is
-             * defined by having a minimum corner at (-1, -1, -1) and a maximum corner at (1, 1, 1).
-             *
-             * Orthographic Matrix:
-             * | 2/(R-L)     0       0      1  |   |   1   0   0   -(L+R)/2  |   | 2/(R-L)     0       0      (L+R)/(L-R)  |
-             * |    0     2/(T-B)    0      1  | * |   0   1   0   -(T+B)/2  | = |    0     2/(T-B)    0      (T+B)/(B-T)  |
-             * |    0        0    2/(F-N)   1  |   |   0   0   1   -(N+F)/2  |   |    0        0    2/(N-F)   (N+F)/(N-F)  |
-             * |    0        0       0      1  |   |   0   0   1       1     |   |    0        0       0           1       |
-             */
-
-            matrix4x4 mat;
-            mat[0][0] = 2.0f / (_right - _left);
-            mat[1][1] = 2.0f / (_top - _bottom);
-            mat[2][2] = 2.0f / (_far - _near);
-            mat[3][3] = 1.0f;
-            mat[3][0] = (_left + _right) / (_left - _right);
-            mat[3][1] = (_top + _bottom) / (_bottom - _top);
-            mat[3][2] = (_near + _far) / (_near - _far);
             return mat;
         }
 
@@ -673,24 +659,27 @@ namespace mkr {
              *
              * Orthographic Matrix:
              * | 2/(R-L)     0       0      1  |   |   1   0   0   -(L+R)/2  |   | 2/(R-L)     0       0      (L+R)/(L-R)  |
-             * |    0     2/(T-B)    0      1  | * |   0   1   0   -(T+B)/2  | = |    0     2/(T-B)    0      (T+B)/(B-T)  |
-             * |    0        0    2/(F-N)   1  |   |   0   0   1   -(N+F)/2  |   |    0        0    2/(N-F)   (N+F)/(N-F)  |
+             * |    0     2/(T-B)    0      1  | * |   0   1   0   -(B+T)/2  | = |    0     2/(T-B)    0      (B+T)/(B-T)  |
+             * |    0        0    2/(N-F)   1  |   |   0   0   1   -(N+F)/2  |   |    0        0    2/(N-F)   (N+F)/(N-F)  |
              * |    0        0       0      1  |   |   0   0   1       1     |   |    0        0       0           1       |
-             *
-             * In this case, we assume our box is already at the origin.
              */
 
-
-            const float top = _ortho_size * 0.5f;
-            const float bottom = -_ortho_size * 0.5f;
-            const float right = _ortho_size * 0.5f * _aspect_ratio;
-            const float left = -_ortho_size * 0.5f * _aspect_ratio;
+            const float half_ortho_size = _ortho_size * 0.5f;
+            const float top = half_ortho_size;
+            const float bottom = -half_ortho_size;
+            const float right = half_ortho_size * _aspect_ratio;
+            const float left = -half_ortho_size * _aspect_ratio;
 
             matrix4x4 mat;
             mat[0][0] = 2.0f / (right - left);
             mat[1][1] = 2.0f / (top - bottom);
-            mat[2][2] = 2.0f / (_far - _near);
+            mat[2][2] = 2.0f / (_near - _far);
             mat[3][3] = 1.0f;
+
+            // In this case, our box is already at the origin, because we do not let the user specify left, right, top or bottom.
+            // mat[3][0] = (left + right) / (left - right); // Always equals 0.
+            // mat[3][1] = (bottom + top) / (bottom - top); // Always equals 0.
+            mat[3][2] = (_near + _far) / (_near - _far);
 
             return mat;
         }
