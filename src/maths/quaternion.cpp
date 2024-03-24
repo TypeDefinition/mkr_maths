@@ -176,7 +176,7 @@ namespace mkr {
     }
 
     quaternion quaternion::inversed() const {
-        return 1 / length_squared() * conjugated();
+        return 1.0f / length_squared() * conjugated();
     }
 
     void quaternion::set_rotation(const vector3& _rotation_axis, float _angle) {
