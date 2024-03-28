@@ -112,12 +112,12 @@ namespace mkr {
         return *this;
     }
 
-    quaternion quaternion::operator*(float _scalar) const {
-        return quaternion{w_ * _scalar, x_ * _scalar, y_ * _scalar, z_ * _scalar};
+    quaternion quaternion::operator*(float _rhs) const {
+        return quaternion{w_ * _rhs, x_ * _rhs, y_ * _rhs, z_ * _rhs};
     }
 
-    quaternion& quaternion::operator*=(float _scalar) {
-        *this = (*this) * _scalar;
+    quaternion& quaternion::operator*=(float _rhs) {
+        *this = (*this) * _rhs;
         return *this;
     }
 
@@ -210,7 +210,7 @@ namespace mkr {
                           0.0f, 0.0f, 0.0f, 1.0f}};
     }
 
-    quaternion operator*(float _scalar, const quaternion& _quaternion) {
-        return _quaternion * _scalar;
+    quaternion operator*(float _lhs, const quaternion& _quaternion) {
+        return _quaternion * _lhs;
     }
 }

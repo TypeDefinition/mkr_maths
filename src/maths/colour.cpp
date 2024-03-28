@@ -2,17 +2,6 @@
 #include "maths/colour.h"
 
 namespace mkr {
-    const colour colour::red{1.0f, 0.0f, 0.0f, 1.0f};
-    const colour colour::green{0.0f, 1.0f, 0.0f, 1.0f};
-    const colour colour::blue{0.0f, 0.0f, 1.0f, 1.0f};
-    const colour colour::yellow{1.0f, 1.0f, 0.0f, 1.0f};
-    const colour colour::cyan{0.0f, 1.0f, 1.0f, 1.0f};
-    const colour colour::magenta{1.0f, 0.0f, 1.0f, 1.0f};
-    const colour colour::black{0.0f, 0.0f, 0.0f, 1.0f};
-    const colour colour::white{1.0f, 1.0f, 1.0f, 1.0f};
-    const colour colour::grey{0.25f, 0.25f, 0.25f, 1.0f};
-    const colour colour::dark_grey{0.1f, 0.1f, 0.1f, 1.0f};
-
     bool colour::operator==(const colour& _rhs) const {
         return maths_util::approx_equal(r_, _rhs.r_) &&
                maths_util::approx_equal(g_, _rhs.g_) &&

@@ -49,9 +49,13 @@ namespace mkr {
 
         vector3& operator-=(const vector3& _rhs);
 
-        vector3 operator*(float _scalar) const;
+        vector3 operator*(float _rhs) const;
 
-        vector3& operator*=(float _scalar);
+        vector3& operator*=(float _rhs);
+
+        vector3 operator*(const vector3& _rhs) const;
+
+        vector3& operator*=(const vector3& _rhs);
 
         /**
          * Normalise this vector.
@@ -130,7 +134,7 @@ namespace mkr {
          */
         [[nodiscard]] vector3 cross(const vector3& _vector) const;
 
-        friend vector3 operator*(float _scalar, const vector3& _vector);
+        friend vector3 operator*(float _lhs, const vector3& _vector);
 
         [[nodiscard]] std::string to_string(const int _precision = 4) const {
             std::ostringstream out;

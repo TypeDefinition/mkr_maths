@@ -43,9 +43,13 @@ namespace mkr {
 
         vector2& operator-=(const vector2& _rhs);
 
-        vector2 operator*(float _scalar) const;
+        vector2 operator*(float _rhs) const;
 
-        vector2& operator*=(float _scalar);
+        vector2& operator*=(float _rhs);
+
+        vector2 operator*(const vector2& _rhs) const;
+
+        vector2& operator*=(const vector2& _rhs);
 
         /**
          * Normalise this vector.
@@ -116,7 +120,7 @@ namespace mkr {
          */
         [[nodiscard]] float angle_between(const vector2& _vector) const;
 
-        friend vector2 operator*(float _scalar, const vector2& _vector);
+        friend vector2 operator*(float _lhs, const vector2& _vector);
 
         [[nodiscard]] std::string to_string(const int _precision = 4) const {
             std::ostringstream out;

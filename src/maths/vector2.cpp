@@ -45,13 +45,23 @@ namespace mkr {
         return *this;
     }
 
-    vector2 vector2::operator*(float _scalar) const {
-        return vector2(_scalar * x_, _scalar * y_);
+    vector2 vector2::operator*(float _rhs) const {
+        return vector2(_rhs * x_, _rhs * y_);
     }
 
-    vector2& vector2::operator*=(float _scalar) {
-        x_ *= _scalar;
-        y_ *= _scalar;
+    vector2& vector2::operator*=(float _rhs) {
+        x_ *= _rhs;
+        y_ *= _rhs;
+        return *this;
+    }
+
+    vector2 vector2::operator*(const vector2& _rhs) const {
+        return vector2(_rhs.x_ * x_, _rhs.y_ * y_);
+    }
+
+    vector2& vector2::operator*=(const vector2& _rhs) {
+        x_ *= _rhs.x_;
+        y_ *= _rhs.y_;
         return *this;
     }
 
@@ -115,7 +125,7 @@ namespace mkr {
         return std::acos(dot(_vector) / (length() * _vector.length()));
     }
 
-    vector2 operator*(float _scalar, const vector2& _vector) {
-        return _vector * _scalar;
+    vector2 operator*(float _lhs, const vector2& _vector) {
+        return _vector * _lhs;
     }
 }

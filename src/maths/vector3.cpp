@@ -51,14 +51,25 @@ namespace mkr {
         return *this;
     }
 
-    vector3 vector3::operator*(float _scalar) const {
-        return vector3(_scalar * x_, _scalar * y_, _scalar * z_);
+    vector3 vector3::operator*(float _rhs) const {
+        return vector3(_rhs * x_, _rhs * y_, _rhs * z_);
     }
 
-    vector3& vector3::operator*=(float _scalar) {
-        x_ *= _scalar;
-        y_ *= _scalar;
-        z_ *= _scalar;
+    vector3& vector3::operator*=(float _rhs) {
+        x_ *= _rhs;
+        y_ *= _rhs;
+        z_ *= _rhs;
+        return *this;
+    }
+
+    vector3 vector3::operator*(const vector3& _rhs) const {
+        return vector3(_rhs.x_ * x_, _rhs.y_ * y_, _rhs.z_ * z_);
+    }
+
+    vector3& vector3::operator*=(const vector3& _rhs) {
+        x_ *= _rhs.x_;
+        y_ *= _rhs.y_;
+        z_ *= _rhs.z_;
         return *this;
     }
 
@@ -132,7 +143,7 @@ namespace mkr {
         return vector3(x, y, z);
     }
 
-    vector3 operator*(float _scalar, const vector3& _vector) {
-        return _vector * _scalar;
+    vector3 operator*(float _lhs, const vector3& _vector) {
+        return _vector * _lhs;
     }
 }

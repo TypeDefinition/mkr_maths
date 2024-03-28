@@ -118,9 +118,9 @@ namespace mkr {
 
         quaternion& operator*=(const quaternion& _rhs);
 
-        quaternion operator*(float _scalar) const;
+        quaternion operator*(float _rhs) const;
 
-        quaternion& operator*=(float _scalar);
+        quaternion& operator*=(float _rhs);
 
         /**
          * Get the dot product of this quaternion and another quaternion.
@@ -213,7 +213,7 @@ namespace mkr {
          */
         [[nodiscard]] matrix4x4 to_rotation_matrix() const;
 
-        friend quaternion operator*(float _scalar, const quaternion& _quaternion);
+        friend quaternion operator*(float _lhs, const quaternion& _quaternion);
 
         [[nodiscard]] std::string to_string(const int _precision = 4) const {
             std::ostringstream out;
