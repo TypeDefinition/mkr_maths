@@ -6,6 +6,7 @@
 #include <iostream>
 #include <iomanip>
 #include "maths/maths_util.h"
+#include "maths/vector3.h"
 
 namespace mkr {
     template<size_t Columns, size_t Rows>
@@ -146,6 +147,11 @@ namespace mkr {
         matrix& operator*=(float _scalar) {
             *this = (*this) * _scalar;
             return *this;
+        }
+
+        vector3 operator*(const vector3 _rhs) const requires (Columns == 4 && Rows == 4) {
+            auto point = (*this) * matrix<1, 4>{{_rhs.x_, _rhs.y_, _rhs.z_, 1.0f}};
+            return vector3{point[0][0] / point[0][3], point[0][1] / point[0][3], point[0][2] / point[0][3]};
         }
 
         friend matrix operator*(float _scalar, const matrix& _matrix) {
