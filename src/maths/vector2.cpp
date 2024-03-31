@@ -1,14 +1,6 @@
 #include "maths/vector2.h"
 
 namespace mkr {
-    const vector2 vector2::zero{0.0f, 0.0f};
-    const vector2 vector2::up{0.0f, 1.0f};
-    const vector2 vector2::down{0.0f, -1.0f};
-    const vector2 vector2::left{1.0f, 0.0f};
-    const vector2 vector2::right{-1.0f, 0.0f};
-    const vector2 vector2::x_axis{1.0f, 0.0f};
-    const vector2 vector2::y_axis{0.0f, 1.0f};
-
     vector2::vector2(float _x, float _y)
             : x_(_x), y_(_y) {}
 
@@ -77,7 +69,7 @@ namespace mkr {
 
     vector2 vector2::normalised() const {
         const float length = this->length();
-        return maths_util::approx_equal(length, 0.0f) ? vector2::zero : vector2{x_ / length, y_ / length};
+        return maths_util::approx_equal(length, 0.0f) ? vector2::zero() : vector2{x_ / length, y_ / length};
     }
 
     bool vector2::is_zero() const {
@@ -116,7 +108,7 @@ namespace mkr {
         const float other_length_squared = _vector.length_squared();
         if (maths_util::approx_equal(other_length_squared, 0.0f) ||
             maths_util::approx_equal(length_squared(), 0.0f)) {
-            return vector2::zero;
+            return vector2::zero();
         }
         return (dot(_vector) * _vector) * (1.0f / other_length_squared);
     }

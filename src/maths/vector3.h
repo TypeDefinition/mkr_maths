@@ -9,16 +9,16 @@ namespace mkr {
      */
     class vector3 {
     public:
-        static const vector3 zero;
-        static const vector3 up;
-        static const vector3 down;
-        static const vector3 left;
-        static const vector3 right;
-        static const vector3 forwards;
-        static const vector3 backwards;
-        static const vector3 x_axis;
-        static const vector3 y_axis;
-        static const vector3 z_axis;
+        static vector3 zero() { return vector3{0.0f, 0.0f, 0.0f}; }
+        static vector3 up() { return vector3{0.0f, 1.0f, 0.0f}; }
+        static vector3 down() { return vector3{0.0f, -1.0f, 0.0f}; }
+        static vector3 left() { return vector3{1.0f, 0.0f, 0.0f}; }
+        static vector3 right() { return vector3{-1.0f, 0.0f, 0.0f}; }
+        static vector3 forwards() { return vector3{0.0f, 0.0f, 1.0f}; }
+        static vector3 backwards() { return vector3{0.0f, 0.0f, -1.0f}; }
+        static vector3 x_axis() { return vector3{1.0f, 0.0f, 0.0f}; }
+        static vector3 y_axis() { return vector3{0.0f, 1.0f, 0.0f}; }
+        static vector3 z_axis() { return vector3{0.0f, 0.0f, 1.0f}; }
 
         /// The x component.
         float x_;

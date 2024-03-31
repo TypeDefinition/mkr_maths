@@ -12,29 +12,26 @@ namespace mkr {
     template<size_t Columns, size_t Rows>
     class matrix {
     private:
-        std::array<float, Columns * Rows> values_;
+        std::array<float, Columns * Rows> values_ = {};
 
     public:
-        matrix() {
-            values_.fill(0.0f);
-        }
+        constexpr matrix() = default;
 
-        matrix(std::array<float, Columns * Rows> _values)
-                : values_{_values} {}
+        constexpr matrix(std::array<float, Columns * Rows> _values) : values_{_values} {}
 
         static constexpr bool is_square_matrix = (Columns == Rows);
 
-        static constexpr size_t size() {
-            return Columns * Rows;
-        }
+        /**
+         * Returns Columns * Rows.
+         * @return Columns * Rows.
+         */
+        static constexpr size_t size() { return Columns * Rows; }
 
         /**
          * Returns a zero matrix.
          * @return A zero matrix.
          */
-        static constexpr matrix zero() {
-            return matrix{};
-        }
+        static constexpr matrix zero() { return matrix{}; }
 
         /**
          * Returns a diagonal matrix.
@@ -43,11 +40,16 @@ namespace mkr {
          */
         static constexpr matrix diagonal(float _value) requires is_square_matrix {
             matrix result;
-            for (size_t i = 0; i < Columns; ++i) {
-                result[i][i] = _value;
-            }
+            for (size_t i = 0; i < Columns; ++i) { result[i][i] = _value; }
             return result;
         }
+
+        /**
+         * Returns an identity matrix.
+         * @return An identity matrix.
+         * @warning This function is only defined for square matrices.
+         */
+        static constexpr matrix identity() requires is_square_matrix { return diagonal(1.0f); }
 
         /**
          * @brief Returns the transpose of a matrix.
@@ -61,15 +63,6 @@ namespace mkr {
                 }
             }
             return mat;
-        }
-
-        /**
-         * Returns an identity matrix.
-         * @return An identity matrix.
-         * @warning This function is only defined for square matrices.
-         */
-        static constexpr matrix identity() requires is_square_matrix {
-            return diagonal(1.0f);
         }
 
         inline const float* operator[](size_t _column) const {

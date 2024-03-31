@@ -9,13 +9,13 @@ namespace mkr {
      */
     class vector2 {
     public:
-        static const vector2 zero;
-        static const vector2 up;
-        static const vector2 down;
-        static const vector2 left;
-        static const vector2 right;
-        static const vector2 x_axis;
-        static const vector2 y_axis;
+        static vector2 zero() { return vector2{0.0f, 0.0f}; }
+        static vector2 up() { return vector2{0.0f, 1.0f}; }
+        static vector2 down() { return vector2{0.0f, -1.0f}; }
+        static vector2 left() { return vector2{1.0f, 0.0f}; }
+        static vector2 right() { return vector2{-1.0f, 0.0f}; }
+        static vector2 x_axis() { return vector2{1.0f, 0.0f}; }
+        static vector2 y_axis() { return vector2{0.0f, 1.0f}; }
 
         /// The x component.
         float x_;

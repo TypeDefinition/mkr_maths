@@ -34,8 +34,7 @@ namespace mkr {
          * @param _b The blue component of the colour.
          * @param _a The alpha component of the colour.
          */
-        constexpr colour(float _r = 1.0f, float _g = 1.0f, float _b = 1.0f, float _a = 1.0f)
-                : r_(_r), g_(_g), b_(_b), a_(_a) {}
+        constexpr colour(float _r = 1.0f, float _g = 1.0f, float _b = 1.0f, float _a = 1.0f) : r_(_r), g_(_g), b_(_b), a_(_a) {}
 
         bool operator==(const colour& _rhs) const;
 

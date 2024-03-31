@@ -9,9 +9,9 @@ namespace mkr {
      */
     class plane {
     public:
-        static const plane xy_plane;
-        static const plane xz_plane;
-        static const plane yz_plane;
+        static plane xy_plane() { return plane{vector3{0, 0, 1}, 0.0f}; }
+        static plane xz_plane() { return plane{vector3{0, 1, 0}, 0.0f}; }
+        static plane yz_plane() { return plane{vector3{1, 0, 0}, 0.0f}; }
 
         /// The normal of the plane.
         vector3 normal_;

@@ -1,9 +1,6 @@
 #include "quaternion.h"
 
 namespace mkr {
-    const quaternion quaternion::zero = quaternion{0.0f, 0.0f, 0.0f, 0.0f};
-    const quaternion quaternion::identity = quaternion{1.0f, 0.0f, 0.0f, 0.0f};
-
     vector3 quaternion::rotate(const vector3& _point, float _angle, const vector3& _rotation_axis) {
         /**
          * Rotation Formula:
@@ -140,7 +137,7 @@ namespace mkr {
     quaternion quaternion::normalised() const {
         const float length = this->length();
         if (maths_util::approx_equal(length, 0.0f)) {
-            return quaternion::zero;
+            return quaternion::zero();
         }
         return quaternion{w_ / length, x_ / length, y_ / length, z_ / length};
     }
@@ -195,7 +192,7 @@ namespace mkr {
         vector3 xyz{x_, y_, z_};
         if (xyz.is_zero()) {
             _angle = 0.0f;
-            _rotation_axis = vector3::x_axis;
+            _rotation_axis = vector3::x_axis();
             return;
         }
 

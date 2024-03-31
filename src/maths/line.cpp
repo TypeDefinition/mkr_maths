@@ -1,10 +1,6 @@
 #include "maths/line.h"
 
 namespace mkr {
-    const line line::x_axis{vector3::zero, vector3::x_axis};
-    const line line::y_axis{vector3::zero, vector3::y_axis};
-    const line line::z_axis{vector3::zero, vector3::z_axis};
-
     line::line(const vector3& _point, const vector3& _direction)
             : point_(_point), direction_(_direction) {}
 

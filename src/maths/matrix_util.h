@@ -583,7 +583,7 @@ namespace mkr {
          * @brief Construct a perspective matrix based on an aspect ratio, field of view, near plane and far plane.
          *
          * @param _aspect_ratio the aspect ratio
-         * @param _fov the field of view
+         * @param _fov the field of view in radians
          * @param _near the near plane
          * @param _far the far plane
          * @return a matrix4x4 perspective matrix

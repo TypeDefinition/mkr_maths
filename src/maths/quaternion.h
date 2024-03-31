@@ -24,8 +24,8 @@ namespace mkr {
      */
     class quaternion {
     public:
-        static const quaternion zero;
-        static const quaternion identity;
+        static quaternion zero() { return quaternion{0.0f, 0.0f, 0.0f, 0.0f}; }
+        static quaternion identity() { return quaternion{1.0f, 0.0f, 0.0f, 0.0f}; }
 
         /**
          * The W component of the quaternion. It is the scalar component.

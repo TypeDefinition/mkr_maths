@@ -1,17 +1,6 @@
 #include "maths/vector3.h"
 
 namespace mkr {
-    const vector3 vector3::zero{0.0f, 0.0f, 0.0f};
-    const vector3 vector3::up{0.0f, 1.0f, 0.0f};
-    const vector3 vector3::down{0.0f, -1.0f, 0.0f};
-    const vector3 vector3::left{1.0f, 0.0f, 0.0f};
-    const vector3 vector3::right{-1.0f, 0.0f, 0.0f};
-    const vector3 vector3::forwards{0.0f, 0.0f, 1.0f};
-    const vector3 vector3::backwards{0.0f, 0.0f, -1.0f};
-    const vector3 vector3::x_axis{1.0f, 0.0f, 0.0f};
-    const vector3 vector3::y_axis{0.0f, 1.0f, 0.0f};
-    const vector3 vector3::z_axis{0.0f, 0.0f, 1.0f};
-
     vector3::vector3(float _x, float _y, float _z)
             : x_(_x), y_(_y), z_(_z) {}
 
@@ -87,7 +76,7 @@ namespace mkr {
     vector3 vector3::normalised() const {
         const float length = this->length();
         if (maths_util::approx_equal(length, 0.0f)) {
-            return vector3::zero;
+            return vector3::zero();
         }
         return vector3{x_ / length, y_ / length, z_ / length};
     }
@@ -127,7 +116,7 @@ namespace mkr {
     vector3 vector3::project(const vector3& _vector) const {
         const float other_length_squared = _vector.length_squared();
         if (maths_util::approx_equal(other_length_squared, 0.0f)) {
-            return vector3::zero;
+            return vector3::zero();
         }
         return (dot(_vector) * _vector) * (1.0f / other_length_squared);
     }

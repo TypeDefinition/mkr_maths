@@ -9,9 +9,9 @@ namespace mkr {
      */
     class line {
     public:
-        static const line x_axis;
-        static const line y_axis;
-        static const line z_axis;
+        static line x_axis() { return line{vector3::zero(), vector3::x_axis()}; }
+        static line y_axis() { return line{vector3::zero(), vector3::y_axis()}; }
+        static line z_axis() { return line{vector3::zero(), vector3::z_axis()}; }
 
         /**
          * A point on the line.
@@ -27,7 +27,7 @@ namespace mkr {
          * @param _point A point on the line.
          * @param _direction The direction of the line.
          */
-        line(const vector3& _point = vector3::zero, const vector3& _direction = vector3::x_axis);
+        line(const vector3& _point = vector3::zero(), const vector3& _direction = vector3::x_axis());
 
         bool operator==(const line& _line) const;
 

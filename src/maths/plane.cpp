@@ -1,10 +1,6 @@
 #include "maths/plane.h"
 
 namespace mkr {
-    const plane plane::xy_plane{vector3{0, 0, 1}, 0.0f};
-    const plane plane::xz_plane{vector3{0, 1, 0}, 0.0f};
-    const plane plane::yz_plane{vector3{1, 0, 0}, 0.0f};
-
     plane::plane(const vector3& _normal, float _d)
             : normal_(_normal), d_(_d) {}
 
