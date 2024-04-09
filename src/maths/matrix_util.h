@@ -167,7 +167,7 @@ namespace mkr {
          */
         template<size_t Size>
         static matrix<Size, Size> adjugate_matrix(const matrix<Size, Size>& _matrix) {
-            return transpose_matrix(cofactor_matrix(_matrix));
+            return cofactor_matrix(_matrix).transposed();
         }
 
         /**

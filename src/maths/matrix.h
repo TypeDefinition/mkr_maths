@@ -188,19 +188,29 @@ namespace mkr {
     typedef matrix<1, 2> matrix1x2;
     typedef matrix<1, 3> matrix1x3;
     typedef matrix<1, 4> matrix1x4;
+    typedef matrix<1, 5> matrix1x5;
 
     typedef matrix<2, 1> matrix2x1;
     typedef matrix<2, 2> matrix2x2;
     typedef matrix<2, 3> matrix2x3;
     typedef matrix<2, 4> matrix2x4;
+    typedef matrix<2, 5> matrix2x5;
 
     typedef matrix<3, 1> matrix3x1;
     typedef matrix<3, 2> matrix3x2;
     typedef matrix<3, 3> matrix3x3;
     typedef matrix<3, 4> matrix3x4;
+    typedef matrix<3, 5> matrix3x5;
 
     typedef matrix<4, 1> matrix4x1;
     typedef matrix<4, 2> matrix4x2;
     typedef matrix<4, 3> matrix4x3;
     typedef matrix<4, 4> matrix4x4;
+    typedef matrix<4, 5> matrix4x5;
+
+    typedef matrix<5, 1> matrix5x1;
+    typedef matrix<5, 2> matrix5x2;
+    typedef matrix<5, 3> matrix5x3;
+    typedef matrix<5, 4> matrix5x4;
+    typedef matrix<5, 5> matrix5x5;
 }

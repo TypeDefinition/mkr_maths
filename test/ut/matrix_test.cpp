@@ -175,4 +175,19 @@ TEST(matrix_test, inverse) {
         EXPECT_TRUE(matrix_util::inverse_matrix(a).value() == b);
         EXPECT_TRUE(matrix_util::inverse_matrix(matrix4x4::identity()) == matrix4x4::identity());
     }
+
+    {
+        matrix5x5 a{{-2.0f, 1.0f, 3.0f, 2.0f, 0.0f,
+                     7.0f, -1.0f, 4.0f, 5.0f, 3.0f,
+                     0.0f, 3.0f, 0.0f, -4.0f, -1.0f,
+                     6.0f, 2.0f, 5.0f, -2.0f, 1.0f,
+                     -2.0f, 2.0f, 3.0f, 2.0f, -4.0f}};
+        matrix5x5 b = matrix<5, 5>{{-289.0f, 148.0f, 85.0f, 1.0f, 90.0f,
+                                    176.0f, 448.0f, 880.0f, -464.0f, 0.0f,
+                                    208.0f, -256.0f, -400.0f, 368.0f, 0.0f,
+                                    31.0f, 308.0f, 245.0f, -319.0f, 90.0f,
+                                    404.0f, 112.0f, 220.0f, -116.0f, -360.0f}} * (1.0f / 1440.0f);
+        EXPECT_TRUE(matrix_util::inverse_matrix(a).value() == b);
+        EXPECT_TRUE(matrix_util::inverse_matrix(matrix5x5::identity()) == matrix5x5::identity());
+    }
 }
