@@ -177,7 +177,7 @@ namespace mkr {
          * @return bool true if the matrix has an inverse, else false
          */
         template<size_t Size>
-        static bool invertible(const matrix<Size, Size>& _matrix) {
+        static bool is_invertible(const matrix<Size, Size>& _matrix) {
             return !maths_util::approx_equal(0.0f, determinant(_matrix));
         }
 

@@ -124,16 +124,16 @@ TEST(matrix_test, transpose) {
 
 TEST(matrix_test, inverse) {
     {
-        EXPECT_TRUE(matrix_util::invertible(matrix1x1::diagonal(4.0f)));
-        EXPECT_TRUE(matrix_util::invertible(matrix2x2::diagonal(5.0f)));
-        EXPECT_TRUE(matrix_util::invertible(matrix3x3::diagonal(6.0f)));
-        EXPECT_TRUE(matrix_util::invertible(matrix4x4::identity()));
+        EXPECT_TRUE(matrix_util::is_invertible(matrix1x1::diagonal(4.0f)));
+        EXPECT_TRUE(matrix_util::is_invertible(matrix2x2::diagonal(5.0f)));
+        EXPECT_TRUE(matrix_util::is_invertible(matrix3x3::diagonal(6.0f)));
+        EXPECT_TRUE(matrix_util::is_invertible(matrix4x4::identity()));
 
         matrix4x4 a{{1.0f, 1.0f, 1.0f, 1.0f,
                      2.0f, 2.0f, 2.0f, 2.0f,
                      3.0f, 3.0f, 3.0f, 3.0f,
                      4.0f, 4.0f, 4.0f, 4.0f}};
-        EXPECT_FALSE(matrix_util::invertible(a));
+        EXPECT_FALSE(matrix_util::is_invertible(a));
     }
 
     {
