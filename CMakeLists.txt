@@ -13,14 +13,9 @@ file(GLOB_RECURSE SRC_FILES LIST_DIRECTORIES true CONFIGURE_DEPENDS
         "${SRC_DIR}/*.cpp")
 add_library(${PROJECT_NAME} ${SRC_FILES})
 
-# External Dependencies
-include(FetchContent)
-FetchContent_Declare(mkr_common_lib GIT_REPOSITORY https://github.com/TypeDefinition/mkr_common_lib.git GIT_TAG main)
-FetchContent_MakeAvailable(mkr_common_lib)
-
 # Target
+set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
 target_include_directories(${PROJECT_NAME} PUBLIC ${SRC_DIR})
-target_link_libraries(${PROJECT_NAME} PUBLIC mkr_common_lib)
 
 # Test
 enable_testing()

@@ -6,3 +6,6 @@ bazel-wamy_engine
 
 .idea
 cmake-build-debug
+
+.vs
+out
