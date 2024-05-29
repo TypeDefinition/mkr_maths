@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.23.2)
 project(mkr_maths_test)
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_FLAGS "-std=c++20 -O0")
+
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 # Source Files
@@ -19,7 +19,7 @@ FetchContent_Declare(google_test GIT_REPOSITORY https://github.com/google/google
 FetchContent_MakeAvailable(google_test)
 
 # Target
-target_link_libraries(${PROJECT_NAME} PUBLIC gtest_main mkr_maths_lib)
+target_link_libraries(${PROJECT_NAME} PUBLIC gtest_main mkr_maths)
 
 # Test
 add_test(NAME ${PROJECT_NAME} COMMAND ${PROJECT_NAME})
